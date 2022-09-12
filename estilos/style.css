@@ -7,6 +7,8 @@
 /*font-family: 'Oswald', sans-serif;*/
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap');
 /*font-family: 'Open Sans', sans-serif;*/
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap');
+/*font-family: 'Roboto', sans-serif;*/
 
 :root{
     --cor-botão:#BF6262;
@@ -16,7 +18,7 @@
 
 body{
     
-    background-color: bisque;
+    background-color: white;
     overflow-x: hidden;
 }
 
@@ -37,12 +39,32 @@ header{
     background-color:white;
 }
 
-.cardapio {
-text-align: center;
+section{
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    display: flex;
 }
-.cardapio-img{
-    width: 100%;
+section h1{
+    display: block;
+    margin: auto;
+    font-size: 6vw;
+    font-family: 'Roboto', sans-serif;
+    text-transform: uppercase;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.548);
 }
+
+
+section.cardapioimg{
+   background-image: url(../imagens/cardapiopc.png);
+   background-size: cover;
+   background-position: right center;
+   background-color: transparent;
+   margin-bottom: 10px;
+   
+}
+
 .cardapio-nav ul {
     max-width: 600px;
     min-width: 200px;
@@ -51,12 +73,12 @@ text-align: center;
     padding: 0;
 }
 .cardapio-nav li{
+    margin-top: 10px;
     border-bottom: 1px;
     border-bottom: solid var(--cor-branca);
 }
 .cardapio-nav li{
-    max-width: 60%;
-    min-width: 20%;
+    width: 30vw;
     text-align: center;
     margin: auto;
     list-style: none;
@@ -93,8 +115,19 @@ text-align: center;
     display: block;
     scroll-behavior: auto;
 }
+ol.sushi-list li.descricao{
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.623);
+    line-height: 8px;
+}
+
+ul.sushi-list li.descricao{
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.623);
+    line-height: 8px;
+}
 .sushi-img{
-    width: 100%;
+    width: 70vw;
     border-radius: 5px 5px 0 0;
 }
 h1.emoj{
@@ -104,7 +137,7 @@ h1.emoj{
 #entradas {
     text-align: center;
     background-color: white;
-    width: 95%;
+    width: 70vw;
     margin: auto;
     text-decoration: none;
     margin-top: 20px;
@@ -116,7 +149,7 @@ h1.emoj{
 #temaki {
     text-align: center;
     background-color: white;
-    width: 95%;
+    width: 70vw;
     margin: auto;
     text-decoration: none;
     margin-top: 20px;
@@ -124,70 +157,22 @@ h1.emoj{
     border-radius: 5px;
     }
 
-#pokes {
-    text-align: center;
-    background-color: white;
-    width: 95%;
-    margin: auto;
-    text-decoration: none;
-    margin-top: 20px;
-    box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.658);
-    border-radius: 5px;
-    }    
-#joy {
-    text-align: center;
-    background-color: white;
-    width: 95%;
-    margin: auto;
-    text-decoration: none;
-    margin-top: 20px;
-    box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.658);
-    border-radius: 5px;
-    }
-#gunkans {
-    text-align: center;
-    background-color: white;
-    width: 95%;
-    margin: auto;
-    text-decoration: none;
-    margin-top: 20px;
-    box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.658);
-    border-radius: 5px;
-    }
+
 #yakisoba {
     text-align: center;
     background-color: white;
-    width: 95%;
+    width: 70vw;
     margin: auto;
     text-decoration: none;
     margin-top: 20px;
     box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.658);
     border-radius: 5px;
     }
-#domburi {
-    text-align: center;
-    background-color: white;
-    width: 95%;
-    margin: auto;
-    text-decoration: none;
-    margin-top: 20px;
-    box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.658);
-    border-radius: 5px;
-    }
-#sashimi {
-    text-align: center;
-    background-color: white;
-    width: 95%;
-    margin: auto;
-    text-decoration: none;
-    margin-top: 20px;
-    box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.658);
-    border-radius: 5px;
-    }
+
 #hot {
     text-align: center;
     background-color: white;
-    width: 95%;
+    width: 70vw;
     margin: auto;
     text-decoration: none;
     margin-top: 20px;
@@ -197,7 +182,7 @@ h1.emoj{
 #combo{
     text-align: center;
     background-color: white;
-    width: 95%;
+    width: 70vw;
     margin: auto;
     text-decoration: none;
     margin-top: 20px;
@@ -209,7 +194,7 @@ h1.emoj{
 .combo{
     text-align: center;
     background-color: white;
-    width: 95%;
+    width: 70vw;
     margin: auto;
     text-decoration: none;
     margin-top: 20px;
@@ -221,12 +206,12 @@ h1.nome-combo{
     padding: 12px;
 }
 .img-combo{
-    width: 100%;
+    width: 70vw;
 }
 .bebidas{
     text-align: center;
     background-color: white;
-    width: 95%;
+    width: 70vw;
     margin: auto;
     text-decoration: none;
     margin-top: 20px;
@@ -236,7 +221,7 @@ h1.nome-combo{
 .t-bebidas{
     text-align: center;
     background-color: white;
-    width: 95%;
+    width: 68vw;
     margin: auto;
     text-decoration: none;
     font-family: 'Aboreto', cursive;
@@ -252,7 +237,7 @@ h1.nome-combo{
     line-height: 24px;
     margin: 10px;
     background-color: white;
-    width: 95%;
+    width: 70vw;
     margin: auto;
     text-decoration: none;
 
@@ -260,7 +245,7 @@ h1.nome-combo{
 footer{
     text-align: center;
     background-color: white;
-    width: 95%;
+    width: 70vw;
     margin: auto;
     text-decoration: none;
     font-family: 'Aboreto', cursive;
@@ -271,4 +256,7 @@ footer{
 footer a{
     text-decoration: none;
     color: #fff;
+}
+footer p{
+    font-size: 12px;
 }
