@@ -54,24 +54,3 @@ export async function register(req: Request, res: Response) {
 		res.status(500).json({ message: "Erro interno no servidor" });
 	}
 }
-
-export async function findOneUser(req: Request, res: Response) {
-	try {
-		if (!req.userId) {
-			res.status(401).json({ message: "Não autenticado" });
-		}
-
-		const establishment = await Establishment.findById(req.userId).select(
-			"-password"
-		);
-
-		if (!establishment) {
-			res.status(404).json({ message: "Estabelecimento Não encontrado" });
-		}
-
-		res.json(establishment);
-	} catch (error) {
-		console.log("Erro ao buscar usuário", error);
-		res.status(500).json({ message: "Error interno no servidor" });
-	}
-}

@@ -32,5 +32,14 @@ export const Order = model(
 				},
 			],
 		},
+		establishment: {
+			required: true,
+			type: Schema.Types.ObjectId,
+			ref: "Establishment",
+		},
+		customerName: {
+			required: true,
+			type: String,
+		},
 	})
 );

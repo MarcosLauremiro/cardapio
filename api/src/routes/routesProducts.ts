@@ -6,6 +6,7 @@ import {
 	deletProducts,
 	listProducts,
 } from "../controller/ProductController";
+import { ensureAuth } from "../middleware/authMiddlewate";
 
 export const productRouter = Router();
 
@@ -24,7 +25,7 @@ export const upload = multer({
 productRouter.get("/", listProducts);
 
 //create product
-productRouter.post("/", upload.single("image"), createProducts);
+productRouter.post("/", upload.single("image"), ensureAuth, createProducts);
 
 //delet products
 productRouter.delete("/:productId", deletProducts);

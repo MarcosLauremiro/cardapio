@@ -13,9 +13,9 @@ export async function listProducts(req: Request, res: Response) {
 
 export async function createProducts(req: Request, res: Response) {
 	try {
+		const establishmentId = res.locals.establishmentId as string;
 		const imagePath = req.file?.filename;
-		const { name, description, price, category, ingredients, establishment } =
-			req.body;
+		const { name, description, price, category, ingredients } = req.body;
 
 		const product = await Product.create({
 			name,
@@ -24,7 +24,7 @@ export async function createProducts(req: Request, res: Response) {
 			imagePath: imagePath,
 			category,
 			ingredients: ingredients ? JSON.parse(ingredients) : [],
-			establishment,
+			establishment: establishmentId,
 		});
 
 		res.status(201).json(product);

@@ -4,6 +4,7 @@ import {
 	listCategories,
 	listProductsByCategory,
 } from "../controller/CategoryController";
+import { ensureAuth } from "../middleware/authMiddlewate";
 
 export const routerCategory = Router();
 
@@ -11,7 +12,7 @@ export const routerCategory = Router();
 routerCategory.get("/", listCategories);
 
 //Create Category
-routerCategory.post("/", CreateCategory);
+routerCategory.post("/", ensureAuth, CreateCategory);
 
 //get products by category
 routerCategory.get("/:categoryId/products", listProductsByCategory);

@@ -2,14 +2,26 @@ version: '3.8'
 
 services:
   mongo:
-    image: mongo:latest
-    container_name: apiretaurante
+    image: mongo:6.0
+    container_name: api_restaurante_mongo
+    restart: unless-stopped
     ports:
-      - '27017:27017'
+      - '27017:27017'    # porta padrão do MongoDB
     environment:
-      MONGO_INITDB_DATABASE: todo
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: 1234
+      MONGO_INITDB_DATABASE: api
     volumes:
-      - todo-data:/data/db
+      - mongo-data:/data/db
+    healthcheck:
+      test: |
+        mongo --username root \
+              --password 1234 \
+              --authenticationDatabase admin \
+              --eval "db.adminCommand('ping')" localhost:27017 --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 volumes:
-  todo-data:
+  mongo-data:

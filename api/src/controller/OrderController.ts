@@ -1,9 +1,17 @@
 import { Request, Response } from "express";
 import { Order } from "../models/Order";
+import { createOrderService } from "../service/OrderService";
 
+//listar pedidos
+//GET /orders?page=2&perPage=20
 export async function listOrder(req: Request, res: Response) {
 	try {
-		const orders = await Order.find()
+		const page = Number(req.query.page) || 1;
+		const perPage = Number(req.query.perPage) || 20;
+		const establishmentId = res.locals.establishmentId;
+		const orders = await Order.find({ establishment: establishmentId })
+			.skip((page - 1) * perPage)
+			.limit(perPage)
 			.sort({ createdAt: 1 })
 			.populate("products.product");
 		res.json(orders);
@@ -13,17 +21,25 @@ export async function listOrder(req: Request, res: Response) {
 	}
 }
 
+//criar pedido
 export async function createOrder(req: Request, res: Response) {
 	try {
-		const { table, products } = req.body;
-		const order = await Order.create({ table, products });
-		res.status(201).json(order);
+		const establishmentId = res.locals.establishmentId as string;
+		const { table, products, customerName } = req.body;
+		const result = await createOrderService({
+			establishmentId,
+			table,
+			products,
+			customerName,
+		});
+		res.status(201).json(result);
 	} catch (error) {
 		console.log(error);
 		res.status(500);
 	}
 }
 
+//Alterar status do pedido
 export async function changeOrderStatus(req: Request, res: Response) {
 	try {
 		const { orderId } = req.params;

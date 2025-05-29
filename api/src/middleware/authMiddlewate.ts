@@ -17,12 +17,12 @@ export const ensureAuth = (
 	const token = authHeader?.split(" ")[1];
 	try {
 		const decoded = jwt.verify(token!, privateKey) as JwtPayload;
-
-		if (!decoded || typeof decoded !== "object" || !decoded.userId) {
+		if (!decoded?.establishment) {
 			res.status(401).json({ message: "Token inválido" });
 		}
 
-		req.userId = String(decoded.userId);
+		res.locals.establishmentId = String(decoded.establishment);
+
 		next();
 	} catch (error) {
 		console.log("JWT inválido", error);

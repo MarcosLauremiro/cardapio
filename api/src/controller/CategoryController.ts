@@ -10,9 +10,14 @@ export async function listCategories(req: Request, res: Response) {
 
 export async function CreateCategory(req: Request, res: Response) {
 	try {
-		const { icon, name, establishment } = req.body;
+		const establishmentId = res.locals.establishmentId as string;
+		const { icon, name } = req.body;
 
-		const category = await Category.create({ icon, name, establishment });
+		const category = await Category.create({
+			icon,
+			name,
+			establishment: establishmentId,
+		});
 
 		res.status(201).json(category);
 	} catch (error) {

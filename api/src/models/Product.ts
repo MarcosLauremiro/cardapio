@@ -44,5 +44,10 @@ export const Product = model(
 			required: true,
 			reg: "Establishment",
 		},
+		active: {
+			type: Boolean,
+			required: true,
+			default: true,
+		},
 	})
 );

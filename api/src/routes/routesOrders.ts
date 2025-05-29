@@ -5,11 +5,12 @@ import {
 	changeOrderStatus,
 	cancelOrder,
 } from "../controller/OrderController";
+import { ensureAuth } from "../middleware/authMiddlewate";
 
 export const routerOrders = Router();
 
 //List orders
-routerOrders.get("/", listOrder);
+routerOrders.get("/", ensureAuth, listOrder);
 
 //create order
 routerOrders.post("/", createOrder);
