@@ -1,0 +1,19 @@
+import type { ReactElement } from "react";
+import { MenuSide } from "../menuSide";
+import { Header } from "../header";
+
+interface LayoutProps {
+  children: ReactElement;
+}
+
+export const Layout = ({ children }: LayoutProps) => {
+  return (
+    <div className="flex h-screen">
+      <MenuSide />
+      <div className="flex flex-col flex-1 ">
+        <Header />
+        <main className="flex-1 p-6 overflow-auto">{children}</main>
+      </div>
+    </div>
+  );
+};

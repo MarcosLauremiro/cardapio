@@ -1,0 +1,126 @@
+@import "tailwindcss";
+:root {
+	--color-primary: #f2cb05;
+	--color-primary-dark: #d9a404;
+
+	--color-secondary: #f29f05;
+	--color-detail: #8c6a03;
+
+	--color-text: #402a01;
+
+	/* Exemplos de uso */
+	/* background: var(--color-primary); */
+	/* color: var(--color-text); */
+	/* border-color: var(--color-detail); */
+
+	--gray-50: #f9fafb;
+	--gray-100: #f3f4f6;
+	--gray-200: #e5e7eb;
+	--gray-300: #d1d5db;
+	--gray-400: #9ca3af;
+	--gray-500: #6b7280;
+	--gray-600: #4b5563;
+	--gray-700: #374151;
+	--gray-800: #1f2937;
+	--gray-900: #111827;
+
+	/* Texto – Mobile (padrão) */
+	--font-small: 0.875rem; /* ~14px */
+	--font-medium: 1rem; /* ~16px */
+	--font-large: 1.125rem; /* ~18px */
+}
+
+/* Tablet (>= 768px) */
+@media (min-width: 768px) {
+	:root {
+		--font-small: 0.9rem; /* ~14.4px */
+		--font-medium: 1.125rem; /* ~18px */
+		--font-large: 1.25rem; /* ~20px */
+	}
+}
+
+/* Desktop (>= 1024px) */
+@media (min-width: 1024px) {
+	:root {
+		--font-small: 1rem; /* ~16px */
+		--font-medium: 1.25rem; /* ~20px */
+		--font-large: 1.5rem; /* ~24px */
+	}
+}
+
+.title {
+	color: var(--color-text);
+}
+
+.subtitle {
+	font-size: var(--font-medium);
+	color: var(--color-text);
+}
+
+.text {
+	font-size: var(--font-small);
+	color: var(--color-text);
+}
+
+body {
+	font-family: "Poppins", sans-serif;
+}
+
+.btn-primary {
+	background-color: var(--color-primary);
+	color: var(--color-text);
+
+	&:hover {
+		background-color: var(--color-primary-dark);
+	}
+}
+
+.btn-secondary {
+	background-color: var(--color-secondary);
+	color: var(--color-text);
+}
+
+.btn-disable {
+	background: var(--gray-300);
+	color: var(--color-text);
+}
+
+@keyframes lensZoomIn {
+	0% {
+		transform: scale(0.5);
+		opacity: 0;
+		border-radius: 9999px;
+	}
+	100% {
+		transform: scale(1);
+		opacity: 1;
+		border-radius: 0;
+	}
+}
+
+@keyframes lensZoomOut {
+	0% {
+		transform: scale(1);
+		opacity: 1;
+		border-radius: 0;
+	}
+	100% {
+		transform: scale(0.5);
+		opacity: 0;
+		border-radius: 9999px;
+	}
+}
+
+.animate-lensZoomIn {
+	animation: lensZoomIn 0.6s ease-out forwards;
+}
+
+.animate-lensZoomOut {
+	animation: lensZoomOut 0.6s ease-in forwards;
+}
+
+.bg-texture {
+	background-image: url("./assets/texture.svg");
+	background-repeat: no-repeat;
+	background-size: cover;
+}
