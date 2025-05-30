@@ -85,7 +85,6 @@ export async function createOrderService(dto: CreateOrderDTO) {
 		table,
 		products: itemsToSave,
 		establishment: establishmentId,
-		status: "Pendente",
 	});
 
 	return {

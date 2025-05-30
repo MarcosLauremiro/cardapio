@@ -13,10 +13,10 @@ export const routerOrders = Router();
 routerOrders.get("/", ensureAuth, listOrder);
 
 //create order
-routerOrders.post("/", createOrder);
+routerOrders.post("/", ensureAuth, createOrder);
 
 //change order status
-routerOrders.patch("/:orderId", changeOrderStatus);
+routerOrders.patch("/:orderId", ensureAuth, changeOrderStatus);
 
 //delete/cal order
 routerOrders.delete("/:orderId", cancelOrder);
