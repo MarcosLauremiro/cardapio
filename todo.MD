@@ -2,18 +2,18 @@
 # TODO
 
 ## PATCH /pedidos/{id}/status
-- [ ] Verificar se o pedido com o `{id}` fornecido existe.
-- [ ] Verificar se a transição de status é permitida com base no status atual.
+- [x] Verificar se o pedido com o `{id}` fornecido existe.
+- [x] Verificar se a transição de status é permitida com base no status atual.
 
 ## Excluir / Cancelar Pedido
-- [ ] Responsável: Cliente (enquanto status for "Pendente").
-- [ ] Verificar se o pedido com o `{id}` fornecido existe.
-- [ ] Verificar se o status atual do pedido é “Pendente”. Se for diferente (“Em preparação”, “Pronto”, “Cancelado”), o cancelamento não é permitido.
+- [x] Responsável: Cliente (enquanto status for "Pendente").
+- [x] Verificar se o pedido com o `{id}` fornecido existe.
+- [x] Verificar se o status atual do pedido é “Pendente”. Se for diferente (“Em preparação”, “Pronto”, “Cancelado”), o cancelamento não é permitido.(front)
 
 ## Listar Categorias GET /categorias
 - [ ] A API deve retornar uma lista de objetos de categoria.
 - [ ] Cada objeto deve conter pelo menos o `id` e o `nome` da categoria.
-- [ ] A ordem de retorno pode ser alfabética ou definida pelo estabelecimento (melhoria futura: incluir campo de ordenação).
+- [x]  A ordem de retorno pode ser alfabética ou definida pelo estabelecimento (melhoria futura: incluir campode ordenação).
 
 ## Criar Categoria
 - [ ] O corpo da requisição deve conter o `nome` da nova categoria.

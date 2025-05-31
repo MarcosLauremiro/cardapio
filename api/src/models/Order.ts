@@ -41,5 +41,9 @@ export const Order = model(
 			required: true,
 			type: String,
 		},
+		canceled: {
+			type: Boolean,
+			default: false,
+		},
 	})
 );

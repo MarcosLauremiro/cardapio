@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { Order } from "../models/Order";
 import { createOrderService } from "../service/OrderService";
+import { HttpError } from "../middleware/HttpError";
 
 //listar pedidos
 //GET /orders?page=2&perPage=20
@@ -24,7 +25,7 @@ export async function listOrder(req: Request, res: Response) {
 //criar pedido
 export async function createOrder(req: Request, res: Response) {
 	try {
-		const establishmentId = res.locals.establishmentId as string;
+		const establishmentId = req.body.establishmentId;
 		const { table, products, customerName } = req.body;
 		const result = await createOrderService({
 			establishmentId,
@@ -43,6 +44,10 @@ export async function createOrder(req: Request, res: Response) {
 export async function changeOrderStatus(req: Request, res: Response) {
 	try {
 		const { orderId } = req.params;
+		if (!orderId) {
+			throw new HttpError(400, "Peidido não encontrado ou não existe");
+		}
+
 		const { status } = req.body;
 		if (!["WAITING", "IN_PRODUCTION", "DONE"].includes(status)) {
 			res.status(400).json({
@@ -62,7 +67,11 @@ export async function changeOrderStatus(req: Request, res: Response) {
 export async function cancelOrder(req: Request, res: Response) {
 	try {
 		const { orderId } = req.params;
-		await Order.findByIdAndDelete(orderId);
+		if (!orderId) {
+			throw new HttpError(400, "Peidido não encontrado ou não existe");
+		}
+
+		await Order.findByIdAndUpdate(orderId, { canceled: true });
 		res.sendStatus(204);
 	} catch (error) {
 		console.log(error);

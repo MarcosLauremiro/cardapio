@@ -4,7 +4,7 @@ import { Category } from "../models/Category";
 import { Product } from "../models/Product";
 
 export async function listCategories(req: Request, res: Response) {
-	const categories = await Category.find();
+	const categories = await Category.find().sort({ nome: 1 });
 	res.json(categories);
 }
 
