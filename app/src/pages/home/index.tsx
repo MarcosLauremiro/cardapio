@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { CardOrder } from "../../components/cardOrder";
+import { useState } from "react";
 
 import {
 	DndContext,
@@ -9,50 +8,13 @@ import {
 	PointerSensor,
 	useSensor,
 	useSensors,
-	useDroppable,
 } from "@dnd-kit/core";
 import { createPortal } from "react-dom";
 import type { Order } from "../../types/order.type";
-
-// Componente para representar uma coluna do Kanban
-interface ColumnProps {
-	title: string;
-	orders: Order[];
-	status: "WAITING" | "IN_PRODUCTION" | "DONE";
-	onSelectOrder: (order: Order) => void;
-	bgColorClass?: string;
-	hoverBgClass?: string;
-}
-
-const Column = ({
-	title,
-	orders,
-	status,
-	onSelectOrder,
-	bgColorClass = "bg-white",
-	hoverBgClass = "hover:bg-gray-100",
-}: ColumnProps) => {
-	const { setNodeRef } = useDroppable({
-		id: status,
-	});
-
-	return (
-		<div ref={setNodeRef} className="flex-1 max-w-[400px]">
-			<CardOrder
-				title={title}
-				orders={orders}
-				onSelectOrder={onSelectOrder}
-				bgColorClass={bgColorClass}
-				hoverBgClass={hoverBgClass}
-				columnId={status}
-			/>
-		</div>
-	);
-};
+import { Column } from "../../components/column";
 
 export const Home = () => {
 	const [orders, setOrders] = useState<Order[]>([
-		// Exemplos de pedidos (substitua pelos seus dados reais)
 		{
 			id: "1",
 			table: "01",
@@ -89,7 +51,6 @@ export const Home = () => {
 					product: { id: "prod1", name: "X-Burger" },
 					quantity: 2,
 				},
-
 			],
 			establishment: "Restaurante Exemplo",
 			customerName: "João Silva",
@@ -237,7 +198,7 @@ export const Home = () => {
 									</p>
 								</div>
 								<div>
-									<span className="text-[13px] font-light">Cliente: </span>
+									<small className="">Cliente: </small>
 									<p className="font-semibold">{activeOrder.customerName}</p>
 								</div>
 							</div>

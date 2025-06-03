@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { Order } from "../models/Order";
 import { createOrderService } from "../service/OrderService";
 import { HttpError } from "../middleware/HttpError";
+import { wsClients } from "..";
 
 //listar pedidos
 //GET /orders?page=2&perPage=20
@@ -27,13 +28,32 @@ export async function createOrder(req: Request, res: Response) {
 	try {
 		const establishmentId = req.body.establishmentId;
 		const { table, products, customerName } = req.body;
-		const result = await createOrderService({
+		const newOrderDoc = await createOrderService({
 			establishmentId,
 			table,
 			products,
 			customerName,
 		});
-		res.status(201).json(result);
+
+		const payload = {
+			type: "NEW_ORDER",
+			data: newOrderDoc,
+		};
+		const sockets = wsClients.get(establishmentId);
+
+		if (sockets) {
+			const message = JSON.stringify(payload);
+			for (const clientSocket of sockets) {
+				if (clientSocket.readyState === WebSocket.OPEN) {
+					clientSocket.send(message);
+				}
+			}
+		}
+		res.status(201).json({
+			id: newOrderDoc._id,
+			status: newOrderDoc.status,
+			mensagem: "Pedido realizado com sucesso!",
+		});
 	} catch (error) {
 		console.log(error);
 		res.status(500);

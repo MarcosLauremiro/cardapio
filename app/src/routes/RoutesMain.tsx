@@ -5,6 +5,7 @@ import { Dashboard } from "../pages/dashboard";
 import { Layout } from "../components/layout";
 import { Home } from "../pages/home";
 import { Menu } from "../pages/menu";
+import { Account } from "../pages/account";
 
 export const RoutesMain = () => {
 	return (
@@ -20,6 +21,14 @@ export const RoutesMain = () => {
 			<Route path="/login" element={<Login />} />
 			<Route path="/register" element={<Register />} />
 			<Route path="/home" element={<Dashboard />} />
+			<Route
+				path="/accout"
+				element={
+					<Layout>
+						<Account />
+					</Layout>
+				}
+			/>
 			<Route
 				path="/menu"
 				element={

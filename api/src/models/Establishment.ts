@@ -57,5 +57,23 @@ export const Establishment = model(
 			type: String,
 			required: true,
 		},
+		neighborhood: {
+			type: String,
+		},
+		road: {
+			type: String,
+		},
+		city: {
+			type: String,
+		},
+		state: {
+			type: String,
+		},
+		number: {
+			type: String,
+		},
+		link: {
+			type: String,
+		},
 	})
 );

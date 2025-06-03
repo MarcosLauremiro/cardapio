@@ -87,9 +87,5 @@ export async function createOrderService(dto: CreateOrderDTO) {
 		establishment: establishmentId,
 	});
 
-	return {
-		id: order._id,
-		status: order.status,
-		mensagem: "Pedido realizado com sucesso!",
-	};
+	return order;
 }

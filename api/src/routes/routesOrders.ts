@@ -16,7 +16,7 @@ routerOrders.get("/", ensureAuth, listOrder);
 routerOrders.post("/", createOrder);
 
 //change order status
-routerOrders.patch("/:orderId",  changeOrderStatus);
+routerOrders.patch("/:orderId", changeOrderStatus);
 
 //delete/cal order
 routerOrders.delete("/:orderId", cancelOrder);

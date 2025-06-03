@@ -17,7 +17,7 @@ export const MenuSide: React.FC = () => {
 	];
 
 	const bottomLinks = [
-		{ to: "/minha-conta", label: "Minha Conta", icon: <FiUser /> },
+		{ to: "/accout", label: "Minha Conta", icon: <FiUser /> },
 		{ to: "/sair", label: "Sair", icon: <FiLogOut /> },
 	];
 
@@ -65,8 +65,15 @@ export const MenuSide: React.FC = () => {
 						<li key={to}>
 							<NavLink
 								to={to}
-								className="flex flex-col items-center gap-3 px-4 py-2 rounded-lg transition-colors duration-200
-                           text-[var(--color-text)] hover:bg-[var(--color-primary-dark)]"
+								className={({ isActive }) =>
+									`flex flex-col items-center gap-3 px-4 py-2 rounded-lg transition-colors duration-200
+                   text-[var(--color-text)] hover:bg-[var(--color-primary-dark)]
+                   ${
+											isActive
+												? "bg-[var(--color-primary-dark)] font-semibold"
+												: ""
+										}`
+								}
 							>
 								<span className="text-lg">{icon}</span>
 								<span className="text-sm">{label}</span>
