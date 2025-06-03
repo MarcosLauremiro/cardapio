@@ -30,6 +30,12 @@
 	--font-large: 1.125rem; /* ~18px */
 }
 
+h1,
+p,
+h2 {
+	color: var(--color-text);
+}
+
 /* Tablet (>= 768px) */
 @media (min-width: 768px) {
 	:root {
@@ -48,22 +54,9 @@
 	}
 }
 
-.title {
-	color: var(--color-text);
-}
-
-.subtitle {
-	font-size: var(--font-medium);
-	color: var(--color-text);
-}
-
-.text {
-	font-size: var(--font-small);
-	color: var(--color-text);
-}
-
 body {
-	font-family: "Poppins", sans-serif;
+	font-family: "Montserrat", sans-serif;
+	font-optical-sizing: auto;
 }
 
 .btn-primary {

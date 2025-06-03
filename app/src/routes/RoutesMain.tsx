@@ -4,6 +4,7 @@ import { Register } from "../pages/register";
 import { Dashboard } from "../pages/dashboard";
 import { Layout } from "../components/layout";
 import { Home } from "../pages/home";
+import { Menu } from "../pages/menu";
 
 export const RoutesMain = () => {
 	return (
@@ -19,6 +20,14 @@ export const RoutesMain = () => {
 			<Route path="/login" element={<Login />} />
 			<Route path="/register" element={<Register />} />
 			<Route path="/home" element={<Dashboard />} />
+			<Route
+				path="/menu"
+				element={
+					<Layout>
+						<Menu />
+					</Layout>
+				}
+			/>
 		</Routes>
 	);
 };

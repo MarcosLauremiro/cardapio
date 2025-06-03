@@ -1,95 +1,250 @@
-import { useState } from "react";
-import { FiHome } from "react-icons/fi";
+import React, { useState } from "react";
+import { CardOrder } from "../../components/cardOrder";
 
-type Pedido = {
-	id: number;
-	cliente: string;
-	item: string;
+import {
+	DndContext,
+	type DragEndEvent,
+	DragOverlay,
+	type DragStartEvent,
+	PointerSensor,
+	useSensor,
+	useSensors,
+	useDroppable,
+} from "@dnd-kit/core";
+import { createPortal } from "react-dom";
+import type { Order } from "../../types/order.type";
+
+// Componente para representar uma coluna do Kanban
+interface ColumnProps {
+	title: string;
+	orders: Order[];
+	status: "WAITING" | "IN_PRODUCTION" | "DONE";
+	onSelectOrder: (order: Order) => void;
+	bgColorClass?: string;
+	hoverBgClass?: string;
+}
+
+const Column = ({
+	title,
+	orders,
+	status,
+	onSelectOrder,
+	bgColorClass = "bg-white",
+	hoverBgClass = "hover:bg-gray-100",
+}: ColumnProps) => {
+	const { setNodeRef } = useDroppable({
+		id: status,
+	});
+
+	return (
+		<div ref={setNodeRef} className="flex-1 max-w-[400px]">
+			<CardOrder
+				title={title}
+				orders={orders}
+				onSelectOrder={onSelectOrder}
+				bgColorClass={bgColorClass}
+				hoverBgClass={hoverBgClass}
+				columnId={status}
+			/>
+		</div>
+	);
 };
 
 export const Home = () => {
-	// Exemplo de dados iniciais (você pode trocar por fetch/axios/etc)
-	const [pendentes] = useState<Pedido[]>([
-		{ id: 1, cliente: "João", item: "Hambúrguer" },
-		{ id: 2, cliente: "Maria", item: "Pizza" },
+	const [orders, setOrders] = useState<Order[]>([
+		// Exemplos de pedidos (substitua pelos seus dados reais)
+		{
+			id: "1",
+			table: "01",
+			status: "WAITING",
+			createdAt: new Date(),
+			products: [
+				{
+					id: "p1",
+					product: { id: "prod1", name: "X-Burger" },
+					quantity: 2,
+				},
+				{
+					id: "p2",
+					product: { id: "prod1", name: "X-Burger" },
+					quantity: 2,
+				},
+				{
+					id: "p3",
+					product: { id: "prod1", name: "X-Burger" },
+					quantity: 2,
+				},
+				{
+					id: "p4",
+					product: { id: "prod1", name: "X-Burger" },
+					quantity: 2,
+				},
+				{
+					id: "p5",
+					product: { id: "prod1", name: "X-Burger" },
+					quantity: 2,
+				},
+				{
+					id: "p6",
+					product: { id: "prod1", name: "X-Burger" },
+					quantity: 2,
+				},
+
+			],
+			establishment: "Restaurante Exemplo",
+			customerName: "João Silva",
+			canceled: false,
+		},
+		{
+			id: "2",
+			table: "02",
+			status: "IN_PRODUCTION",
+			createdAt: new Date(),
+			products: [
+				{
+					id: "p2",
+					product: { id: "prod2", name: "Batata Frita" },
+					quantity: 1,
+				},
+			],
+			establishment: "Restaurante Exemplo",
+			customerName: "Maria Souza",
+			canceled: false,
+		},
+		{
+			id: "3",
+			table: "03",
+			status: "DONE",
+			createdAt: new Date(),
+			products: [
+				{
+					id: "p3",
+					product: { id: "prod3", name: "Refrigerante" },
+					quantity: 3,
+				},
+			],
+			establishment: "Restaurante Exemplo",
+			customerName: "Pedro Santos",
+			canceled: false,
+		},
 	]);
-	const [emPreparo] = useState<Pedido[]>([
-		{ id: 3, cliente: "Carlos", item: "Salada" },
-	]);
-	const [prontos] = useState<Pedido[]>([
-		{ id: 4, cliente: "Ana", item: "Sushi" },
-	]);
+
+	const [activeOrder, setActiveOrder] = useState<Order | null>(null);
+	console.log(activeOrder);
+
+	const sensors = useSensors(
+		useSensor(PointerSensor, {
+			activationConstraint: {
+				distance: 8,
+			},
+		})
+	);
+
+	const waitingOrders = orders.filter((order) => order.status === "WAITING");
+	const inProductionOrders = orders.filter(
+		(order) => order.status === "IN_PRODUCTION"
+	);
+	const doneOrders = orders.filter((order) => order.status === "DONE");
+
+	const handleDragStart = (event: DragStartEvent) => {
+		const { active } = event;
+		const orderId = active.id as string;
+		const draggedOrder = orders.find(
+			(order) =>
+				order.id === orderId ||
+				order.table + order.createdAt.toISOString() === orderId
+		);
+
+		if (draggedOrder) {
+			setActiveOrder(draggedOrder);
+		}
+	};
+
+	const handleDragEnd = (event: DragEndEvent) => {
+		setActiveOrder(null);
+
+		const { active, over } = event;
+
+		if (!over) return;
+
+		const activeOrderId = active.id as string;
+		const overColumnId = over.id as string;
+
+		if (overColumnId !== active.data.current?.fromColumn) {
+			setOrders((prevOrders) => {
+				return prevOrders.map((order) => {
+					if (
+						order.id === activeOrderId ||
+						order.table + order.createdAt.toISOString() === activeOrderId
+					) {
+						return {
+							...order,
+							status: overColumnId as "WAITING" | "IN_PRODUCTION" | "DONE",
+						};
+					}
+					return order;
+				});
+			});
+		}
+	};
+
+	const handleSelectOrder = (order: Order) => {
+		console.log("Pedido selecionado:", order);
+	};
 
 	return (
-		<div className="flex flex-col gap-5 h-full p-6 bg-gray-100">
-			<div className="">
-				<h1 className="title text-[20px] font-semibold flex items-center gap-2">
-					<FiHome />
-					Home
-				</h1>
-				<p className="text ">Acompanhe os pedidos dos clientes</p>
-			</div>
-			<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-				{/* Coluna PENDENTES */}
-				<div className="bg-white rounded-lg shadow p-4 flex flex-col">
-					<h2 className="text-lg font-medium mb-3 text-gray-700">Pendente</h2>
-					<div className="flex-1 space-y-3 overflow-y-auto">
-						{pendentes.map((pedido) => (
-							<div
-								key={pedido.id}
-								className="border border-gray-200 rounded-md p-3 bg-yellow-50 hover:bg-yellow-100 transition"
-							>
-								<p className="font-semibold text-gray-800">#{pedido.id}</p>
-								<p className="text-gray-600">Cliente: {pedido.cliente}</p>
-								<p className="text-gray-600">Item: {pedido.item}</p>
-							</div>
-						))}
-						{pendentes.length === 0 && (
-							<p className="text-gray-500 text-sm">Nenhum pedido pendente.</p>
-						)}
-					</div>
-				</div>
+		<DndContext
+			sensors={sensors}
+			onDragStart={handleDragStart}
+			onDragEnd={handleDragEnd}
+		>
+			<div className="flex gap-6 p-6 h-full bg-gray-100">
+				<Column
+					title="Espera"
+					orders={waitingOrders}
+					status="WAITING"
+					onSelectOrder={handleSelectOrder}
+					hoverBgClass="hover:bg-gray-100"
+				/>
 
-				{/* Coluna EM PREPARO */}
-				<div className="bg-white rounded-lg shadow p-4 flex flex-col">
-					<h2 className="text-lg font-medium mb-3 text-gray-700">Em Preparo</h2>
-					<div className="flex-1 space-y-3 overflow-y-auto">
-						{emPreparo.map((pedido) => (
-							<div
-								key={pedido.id}
-								className="border border-gray-200 rounded-md p-3 bg-blue-50 hover:bg-blue-100 transition"
-							>
-								<p className="font-semibold text-gray-800">#{pedido.id}</p>
-								<p className="text-gray-600">Cliente: {pedido.cliente}</p>
-								<p className="text-gray-600">Item: {pedido.item}</p>
-							</div>
-						))}
-						{emPreparo.length === 0 && (
-							<p className="text-gray-500 text-sm">Nenhum pedido em preparo.</p>
-						)}
-					</div>
-				</div>
+				<Column
+					title="Preparo"
+					orders={inProductionOrders}
+					status="IN_PRODUCTION"
+					onSelectOrder={handleSelectOrder}
+					hoverBgClass="hover:bg-blue-100"
+				/>
 
-				{/* Coluna PRONTOS */}
-				<div className="bg-white rounded-lg shadow p-4 flex flex-col">
-					<h2 className="text-lg font-medium mb-3 text-gray-700">Pronto</h2>
-					<div className="flex-1 space-y-3 overflow-y-auto">
-						{prontos.map((pedido) => (
-							<div
-								key={pedido.id}
-								className="border border-gray-200 rounded-md p-3 bg-green-50 hover:bg-green-100 transition"
-							>
-								<p className="font-semibold text-gray-800">#{pedido.id}</p>
-								<p className="text-gray-600">Cliente: {pedido.cliente}</p>
-								<p className="text-gray-600">Item: {pedido.item}</p>
+				<Column
+					title="Pronto"
+					orders={doneOrders}
+					status="DONE"
+					onSelectOrder={handleSelectOrder}
+					hoverBgClass="hover:bg-green-100"
+				/>
+
+				{activeOrder &&
+					document.body &&
+					createPortal(
+						<DragOverlay>
+							<div className="border border-gray-200 rounded-md p-3 transition cursor-pointer flex flex-col gap-2 w-64">
+								<div className="flex items-center gap-3 border-b border-gray-300 pb-4">
+									<div className="flex items-center justify-center rounded-full bg-green-700 w-8 h-8">
+										<span className="text-white">{activeOrder.table}</span>
+									</div>
+									<p className="font-semibold text-[18px] text-green-700">
+										Mesa: {activeOrder.table}
+									</p>
+								</div>
+								<div>
+									<span className="text-[13px] font-light">Cliente: </span>
+									<p className="font-semibold">{activeOrder.customerName}</p>
+								</div>
 							</div>
-						))}
-						{prontos.length === 0 && (
-							<p className="text-gray-500 text-sm">Nenhum pedido pronto.</p>
-						)}
-					</div>
-				</div>
+						</DragOverlay>,
+						document.body
+					)}
 			</div>
-		</div>
+		</DndContext>
 	);
 };

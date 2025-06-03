@@ -12,7 +12,7 @@ export const MenuSide: React.FC = () => {
 	const links = [
 		{ to: "/", label: "Home", icon: <FiHome /> },
 		{ to: "/historico", label: "Histórico", icon: <FiClock /> },
-		{ to: "/cardapio", label: "Cardápio", icon: <FiClipboard /> },
+		{ to: "/menu", label: "Cardápio", icon: <FiClipboard /> },
 		{ to: "/usuarios", label: "Usuários", icon: <FiUsers /> },
 	];
 
