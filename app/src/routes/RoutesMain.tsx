@@ -6,6 +6,7 @@ import { Layout } from "../components/layout";
 import { Home } from "../pages/home";
 import { Menu } from "../pages/menu";
 import { Account } from "../pages/account";
+import { History } from "../pages/history";
 
 export const RoutesMain = () => {
 	return (
@@ -30,6 +31,14 @@ export const RoutesMain = () => {
 				}
 			/>
 			<Route
+				path="/history"
+				element={
+					<Layout>
+						<History />
+					</Layout>
+				}
+			/>
+			<Route
 				path="/menu"
 				element={
 					<Layout>
@@ -37,6 +46,7 @@ export const RoutesMain = () => {
 					</Layout>
 				}
 			/>
+			<Route path="*" element={<h1>Page Not Found 404</h1>} />
 		</Routes>
 	);
 };

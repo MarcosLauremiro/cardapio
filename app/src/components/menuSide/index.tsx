@@ -11,7 +11,7 @@ import {
 export const MenuSide: React.FC = () => {
 	const links = [
 		{ to: "/", label: "Home", icon: <FiHome /> },
-		{ to: "/historico", label: "Histórico", icon: <FiClock /> },
+		{ to: "/history", label: "Histórico", icon: <FiClock /> },
 		{ to: "/menu", label: "Cardápio", icon: <FiClipboard /> },
 		{ to: "/usuarios", label: "Usuários", icon: <FiUsers /> },
 	];

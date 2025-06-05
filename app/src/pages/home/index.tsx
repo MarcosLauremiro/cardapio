@@ -159,7 +159,7 @@ export const Home = () => {
 			onDragStart={handleDragStart}
 			onDragEnd={handleDragEnd}
 		>
-			<div className="flex gap-6 p-6 h-full bg-gray-100">
+			<div className="flex-col flex lg:flex-row lg:gap-6 lg:p-6 bg-gray-100">
 				<Column
 					title="Espera"
 					orders={waitingOrders}

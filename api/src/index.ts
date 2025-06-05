@@ -5,22 +5,18 @@ import mongoose from "mongoose";
 import path from "path";
 import { createServer } from "http";
 import { WebSocketServer, WebSocket } from "ws";
-
-// Extende a interface WebSocket para incluir establishmentId
 declare module "ws" {
 	interface WebSocket {
 		establishmentId?: string;
 	}
 }
-
-// rotas
+import cors from "cors";
 import { routerCategory } from "./routes/routesCategories";
 import { productRouter } from "./routes/routesProducts";
 import { routerOrders } from "./routes/routesOrders";
 import { authRoutes } from "./routes/routesAuth";
 import { establishmentRoutes } from "./routes/establishmentRoutes";
 
-// Map para guardar, para cada establishmentId, o(s) WebSocket(s) conectados
 export const wsClients = new Map<string, Set<WebSocket>>();
 
 const mongoDB = process.env.MONGODB!;
@@ -29,12 +25,21 @@ if (!mongoDB) {
 }
 
 mongoose
-	.connect(mongoDB)
+	.connect(mongoDB, {
+		useNewUrlParser: true,
+		useUnifiedTopology: true,
+	} as mongoose.ConnectOptions)
+	.then(() => {
+		console.log("✅ Conectou ao MongoDB");
+	})
+	.catch((err) => {
+		console.error("⁉️ Erro ao conectar no MongoDB:", err.message);
+	})
 	.then(() => {
 		const app = express();
+		app.use(cors({ origin: "http://localhost:5173" }));
 		app.use(express.json());
 
-		// Monta suas rotas REST normalmente
 		app.use("/categories", routerCategory);
 		app.use("/products", productRouter);
 		app.use("/orders", routerOrders);
@@ -45,15 +50,12 @@ mongoose
 		);
 		app.use("/", authRoutes);
 
-		// Cria o servidor HTTP “manual” a partir do Express
 		const port = process.env.PORT ? Number(process.env.PORT) : 3001;
 		const httpServer = createServer(app);
 
-		// Agora “anexa” o WebSocketServer a esse httpServer
 		const wss = new WebSocketServer({ server: httpServer });
 
 		wss.on("connection", async (ws: WebSocket, req) => {
-			// Extrai o token JWT da query string, por exemplo: ws://localhost:3001/?token=XXX
 			const url = req.url || "";
 			const params = new URLSearchParams(url.replace("/?", ""));
 			const token = params.get("token");
@@ -64,19 +66,16 @@ mongoose
 			}
 
 			try {
-				// Decodifica o JWT para pegar o establishmentId
 				const { verify } = await import("jsonwebtoken");
 				const decoded = verify(token, process.env.PRIVATEKEY!) as {
 					establishment: string;
 				};
 				const establishmentId = String(decoded.establishment);
 
-				// Guarda esse ws no Map
 				if (!wsClients.has(establishmentId)) {
 					wsClients.set(establishmentId, new Set());
 				}
 				wsClients.get(establishmentId)!.add(ws);
-				// Armazena no próprio ws para saber quem é, na hora de desconectar
 				ws.establishmentId = establishmentId;
 
 				console.log(`WS conectado para establishmentId=${establishmentId}`);
@@ -99,7 +98,6 @@ mongoose
 			}
 		});
 
-		// Faz o httpServer (Express + WS) escutar na porta 3001
 		httpServer.listen(port, () => {
 			console.log(`🛸 HTTP+WS rodando em http://localhost:${port}`);
 		});

@@ -2,5 +2,5 @@ export interface Category {
 	id: string;
 	icon: string
 	name: string
-	active: boolean
+	isActive: boolean
 }

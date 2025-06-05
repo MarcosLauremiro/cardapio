@@ -11,7 +11,13 @@ export async function listCategories(req: Request, res: Response) {
 export async function CreateCategory(req: Request, res: Response) {
 	try {
 		const establishmentId = res.locals.establishmentId as string;
+
 		const { icon, name } = req.body;
+		const nameExists = await Category.findOne({ name: name });
+
+		if (nameExists) {
+			res.status(400).json({ error: "Essa categoria já existe." });
+		}
 
 		const category = await Category.create({
 			icon,

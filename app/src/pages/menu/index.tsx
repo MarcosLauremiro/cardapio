@@ -47,7 +47,7 @@ export const Menu = () => {
 					onClick={() => handleOpenCategoryModal()}
 				>
 					<span>
-						<BiPlus size={35} className="text-green-600" />
+						<BiPlus size={27} className="text-green-600" />
 					</span>
 				</div>
 				<CardCategory handleOpenCategoryModal={handleOpenCategoryModal} />

@@ -1,4 +1,3 @@
-// src/components/PasswordAccount.tsx
 import { useState, useEffect } from "react";
 import { MdVisibility, MdVisibilityOff } from "react-icons/md";
 
@@ -11,7 +10,6 @@ export function PasswordAccount() {
 	const [showNew, setShowNew] = useState(false);
 	const [showConfirm, setShowConfirm] = useState(false);
 
-	// Validações do novo password
 	const [hasMinLength, setHasMinLength] = useState(false);
 	const [hasUppercase, setHasUppercase] = useState(false);
 	const [hasLowercase, setHasLowercase] = useState(false);
@@ -35,10 +33,8 @@ export function PasswordAccount() {
 	function handleSubmit(e: React.FormEvent) {
 		e.preventDefault();
 		if (!canSubmit) return;
-		// Aqui você chamaria sua API para trocar senha
 		console.log("Old:", oldPassword);
 		console.log("New:", newPassword);
-		// Depois, limpar campos ou exibir notificação de sucesso
 		setOldPassword("");
 		setNewPassword("");
 		setConfirmPassword("");
@@ -51,7 +47,6 @@ export function PasswordAccount() {
 			</h2>
 
 			<form onSubmit={handleSubmit} className="space-y-6">
-				{/* Old Password */}
 				<div>
 					<label className="block text-sm font-medium text-gray-700 mb-1">
 						Old Password
@@ -80,8 +75,6 @@ export function PasswordAccount() {
 						</button>
 					</div>
 				</div>
-
-				{/* New Password */}
 				<div>
 					<label className="block text-sm font-medium text-gray-700 mb-1">
 						New Password
@@ -157,8 +150,6 @@ export function PasswordAccount() {
 						</li>
 					</ul>
 				</div>
-
-				{/* Confirm New Password */}
 				<div>
 					<label className="block text-sm font-medium text-gray-700 mb-1">
 						Confirm New Password
@@ -185,7 +176,6 @@ export function PasswordAccount() {
 					)}
 				</div>
 
-				{/* Botão de Mudar Senha */}
 				<div>
 					<button
 						type="submit"

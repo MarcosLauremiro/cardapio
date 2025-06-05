@@ -6,6 +6,7 @@ export const Category = model(
 		name: {
 			type: String,
 			required: true,
+			unique: true,
 		},
 		icon: {
 			type: String,
@@ -15,6 +16,11 @@ export const Category = model(
 			type: Schema.Types.ObjectId,
 			required: true,
 			reg: "Establishment",
+		},
+		isActive: {
+			type: Boolean,
+			default: true,
+			required: true,
 		},
 	})
 );
