@@ -159,13 +159,14 @@ export const Home = () => {
 			onDragStart={handleDragStart}
 			onDragEnd={handleDragEnd}
 		>
-			<div className="flex-col flex lg:flex-row lg:gap-6 lg:p-6 bg-gray-100">
+			<div className="flex flex-col sm:flex-row gap-4 lg:m-auto">
 				<Column
 					title="Espera"
 					orders={waitingOrders}
 					status="WAITING"
 					onSelectOrder={handleSelectOrder}
 					hoverBgClass="hover:bg-gray-100"
+					bgCollun="bg-red-400"
 				/>
 
 				<Column
@@ -174,6 +175,7 @@ export const Home = () => {
 					status="IN_PRODUCTION"
 					onSelectOrder={handleSelectOrder}
 					hoverBgClass="hover:bg-blue-100"
+					bgCollun="bg-yellow-400"
 				/>
 
 				<Column
@@ -182,6 +184,7 @@ export const Home = () => {
 					status="DONE"
 					onSelectOrder={handleSelectOrder}
 					hoverBgClass="hover:bg-green-100"
+					bgCollun="bg-green-600"
 				/>
 
 				{activeOrder &&
@@ -190,10 +193,10 @@ export const Home = () => {
 						<DragOverlay>
 							<div className="border border-gray-200 rounded-md p-3 transition cursor-pointer flex flex-col gap-2 w-64">
 								<div className="flex items-center gap-3 border-b border-gray-300 pb-4">
-									<div className="flex items-center justify-center rounded-full bg-green-700 w-8 h-8">
+									<div className="flex items-center justify-center rounded-full bg-[--color-info] w-8 h-8">
 										<span className="text-white">{activeOrder.table}</span>
 									</div>
-									<p className="font-semibold text-[18px] text-green-700">
+									<p className="font-semibold text-[18px] text-[--color-info]">
 										Mesa: {activeOrder.table}
 									</p>
 								</div>

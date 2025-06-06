@@ -23,7 +23,7 @@ export const MenuSide: React.FC = () => {
 
 	return (
 		<aside
-			className="flex flex-col justify-between h-screen w-28 p-4"
+			className="flex flex-col justify-between h-screen w-18 sm:w-28 p-4"
 			style={{ backgroundColor: "var(--color-primary)" }}
 		>
 			{/* Logo */}
@@ -51,7 +51,7 @@ export const MenuSide: React.FC = () => {
 								}
 							>
 								<span className="text-lg">{icon}</span>
-								<span className="text-sm">{label}</span>
+								<span className="text-sm hidden sm:block">{label}</span>
 							</NavLink>
 						</li>
 					))}
@@ -76,7 +76,7 @@ export const MenuSide: React.FC = () => {
 								}
 							>
 								<span className="text-lg">{icon}</span>
-								<span className="text-sm">{label}</span>
+								<span className="text-sm hidden sm:block">{label}</span>
 							</NavLink>
 						</li>
 					))}

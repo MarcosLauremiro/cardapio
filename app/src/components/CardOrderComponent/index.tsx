@@ -11,6 +11,7 @@ interface CardOrderProps {
 	bgColorClass?: string;
 	hoverBgClass?: string;
 	columnId?: string;
+	bgCollun?: string;
 }
 
 interface DraggableOrderCardProps {
@@ -54,7 +55,7 @@ const DraggableOrderCard = ({
 					onSelectOrder(order);
 				}
 			}}
-			className={`border border-[var(--gray-200)] rounded-md p-3 ${hoverBgClass} transition cursor-grab active:cursor-grabbing flex flex-col gap-2`}
+			className={`border border-[var(--gray-200)] rounded-md p-3 ${hoverBgClass} bg-gray-50 transition cursor-grab active:cursor-grabbing flex flex-col gap-2`}
 		>
 			<div className="flex items-center gap-3 border-b border-[var(--gray-300)] pb-4">
 				<div className="flex items-center justify-center rounded-full bg-[var(--color-info)] w-8 h-8">
@@ -95,11 +96,12 @@ export const CardOrder = ({
 	onSelectOrder,
 	emptyMessage = "Nenhum pedido.",
 	hoverBgClass = "hover:bg-gray-100",
+	bgCollun = "",
 	columnId,
 }: CardOrderProps) => {
 	return (
 		<div
-			className={`rounded-lg shadow flex flex-col bg-[var(--gray-50)]`}
+			className={`rounded-lg shadow flex flex-col ${bgCollun}`}
 			id={columnId}
 		>
 			<div className="flex items-center gap-2 justify-center py-6">

@@ -10,6 +10,7 @@ interface ColumnProps {
 	onSelectOrder: (order: Order) => void;
 	bgColorClass?: string;
 	hoverBgClass?: string;
+	bgCollun?: string
 }
 
 export const Column = ({
@@ -19,6 +20,7 @@ export const Column = ({
 	onSelectOrder,
 	bgColorClass = "bg-white",
 	hoverBgClass = "hover:bg-gray-100",
+	bgCollun = ""
 }: ColumnProps) => {
 	const { setNodeRef } = useDroppable({
 		id: status,
@@ -33,6 +35,7 @@ export const Column = ({
 				bgColorClass={bgColorClass}
 				hoverBgClass={hoverBgClass}
 				columnId={status}
+				bgCollun={bgCollun}
 			/>
 		</div>
 	);
