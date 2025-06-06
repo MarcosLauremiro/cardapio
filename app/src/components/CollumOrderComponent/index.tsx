@@ -1,4 +1,4 @@
-import { CardOrder } from "../../components/cardOrder";
+import { CardOrder } from "../CardOrderComponent";
 
 import { useDroppable } from "@dnd-kit/core";
 import type { Order } from "../../types/order.type";

@@ -6,9 +6,9 @@ import {
 	MdOutlineMenuOpen,
 } from "react-icons/md";
 
-import { AccountInfo } from "../../components/accoutInfos";
-import { PlanAccount } from "../../components/planAccount";
-import { PasswordAccount } from "../../components/passwordAccount";
+import { AccountInfo } from "../../components/InfoAccountComponent";
+import { PlanAccount } from "../../components/PlanAccountComponent";
+import { PasswordAccount } from "../../components/PasswordAccountComponent";
 
 type MenuOption = "account" | "plan" | "password";
 

@@ -2,10 +2,10 @@ import { BiPlus } from "react-icons/bi";
 import { useState } from "react";
 import type { Product } from "../../types/product.type";
 import type { Category } from "../../types/category.type";
-import { CategoryModal } from "../../components/categoryModal";
-import { ProductModal } from "../../components/productModal";
-import { CardCategory } from "../../components/cardCategory";
-import { CardProduct } from "../../components/cardProduct";
+import { CategoryModal } from "../../components/ModalCategoryComponent";
+import { ProductModal } from "../../components/ModalProductComponent";
+import { CardCategory } from "../../components/CardCategoryComponent";
+import { CardProduct } from "../../components/CardProductComponent";
 
 export const Menu = () => {
 	const [showProductModal, setShowProductModal] = useState(false);

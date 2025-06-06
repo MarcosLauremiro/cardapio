@@ -15,7 +15,8 @@ import { routerCategory } from "./routes/routesCategories";
 import { productRouter } from "./routes/routesProducts";
 import { routerOrders } from "./routes/routesOrders";
 import { authRoutes } from "./routes/routesAuth";
-import { establishmentRoutes } from "./routes/establishmentRoutes";
+import { establishmentRoutes } from "./routes/routesEstablishment";
+import { errorHandler } from "./middleware/ErrorHandle";
 
 export const wsClients = new Map<string, Set<WebSocket>>();
 
@@ -49,6 +50,8 @@ mongoose
 			express.static(path.resolve(__dirname, "..", "uploads"))
 		);
 		app.use("/", authRoutes);
+
+		app.use(errorHandler);
 
 		const port = process.env.PORT ? Number(process.env.PORT) : 3001;
 		const httpServer = createServer(app);

@@ -28,3 +28,10 @@ export type DaySchedule = {
 	fechamento: string; // "HH:mm"
 	fechado?: boolean;
 };
+
+export interface CreateCategoryDto {
+	name: string;
+	icon: string;
+	isActive: boolean;
+	establishmentId: string;
+}

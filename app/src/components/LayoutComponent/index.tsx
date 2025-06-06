@@ -1,6 +1,6 @@
 import type { ReactElement } from "react";
-import { MenuSide } from "../menuSide";
-import { Header } from "../header";
+import { MenuSide } from "../MenuSideLayoutComponent";
+import { Header } from "../HeaderLayoutComponent";
 
 interface LayoutProps {
   children: ReactElement;

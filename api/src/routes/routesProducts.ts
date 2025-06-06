@@ -6,7 +6,7 @@ import {
 	deletProducts,
 	listProducts,
 } from "../controller/ProductController";
-import { ensureAuth } from "../middleware/authMiddlewate";
+import { ensureAuth } from "../middleware/AuthMiddlewate";
 
 export const productRouter = Router();
 

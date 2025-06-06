@@ -22,7 +22,7 @@ export function CardCategory({ handleOpenCategoryModal }: CardCategoryProps) {
 		<ul className="flex items-center gap-4">
 			{categories.map((category) => (
 				<li
-					key={category.id}
+					key={category._id}
 					className={`flex items-center border rounded-2xl border-gray-200 shadow-lg p-4 hover:bg-gray-200 cursor-pointer duration-300 gap-2 ${
 						!category.isActive ? "opacity-60" : ""
 					}`}

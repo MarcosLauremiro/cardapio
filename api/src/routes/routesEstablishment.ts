@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { ensureAuth } from "../middleware/authMiddlewate";
+import { ensureAuth } from "../middleware/AuthMiddlewate";
 import {
 	findEstablishment,
 	setSchedule,

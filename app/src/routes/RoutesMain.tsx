@@ -2,7 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import { Login } from "../pages/login";
 import { Register } from "../pages/register";
 import { Dashboard } from "../pages/dashboard";
-import { Layout } from "../components/layout";
+import { Layout } from "../components/LayoutComponent";
 import { Home } from "../pages/home";
 import { Menu } from "../pages/menu";
 import { Account } from "../pages/account";

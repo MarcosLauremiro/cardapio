@@ -5,7 +5,7 @@ import {
 	changeOrderStatus,
 	cancelOrder,
 } from "../controller/OrderController";
-import { ensureAuth } from "../middleware/authMiddlewate";
+import { ensureAuth } from "../middleware/AuthMiddlewate";
 
 export const routerOrders = Router();
 

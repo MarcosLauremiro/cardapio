@@ -11,7 +11,7 @@ import {
 } from "@dnd-kit/core";
 import { createPortal } from "react-dom";
 import type { Order } from "../../types/order.type";
-import { Column } from "../../components/column";
+import { Column } from "../../components/CollumOrderComponent";
 
 export const Home = () => {
 	const [orders, setOrders] = useState<Order[]>([
