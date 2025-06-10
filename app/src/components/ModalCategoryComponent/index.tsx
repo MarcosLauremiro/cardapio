@@ -24,7 +24,6 @@ export const CategoryModal = ({
 	);
 	const [submitting, setSubmitting] = useState<boolean>(false);
 
-	// Hooks do RTK Query
 	const [createCategory] = useCreateCategoryMutation();
 	const [updateCategory] = useUpdateCategoryMutation();
 	const [deleteCategory] = useDeleteCategoryMutation();
@@ -71,14 +70,12 @@ export const CategoryModal = ({
 
 		try {
 			if (editingCategory) {
-				// Edição
 				await updateCategory({
 					id: editingCategory._id,
 					data: payload,
 				}).unwrap();
 				toast.success("Categoria atualizada com sucesso");
 			} else {
-				// Criação
 				await createCategory(payload).unwrap();
 				toast.success("Categoria Criada com sucesso");
 			}

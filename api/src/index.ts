@@ -17,6 +17,7 @@ import { routerOrders } from "./routes/routesOrders";
 import { authRoutes } from "./routes/routesAuth";
 import { establishmentRoutes } from "./routes/routesEstablishment";
 import { errorHandler } from "./middleware/ErrorHandle";
+import { setupSwagger } from "./utils/swagger";
 
 export const wsClients = new Map<string, Set<WebSocket>>();
 
@@ -50,6 +51,8 @@ mongoose
 			express.static(path.resolve(__dirname, "..", "uploads"))
 		);
 		app.use("/", authRoutes);
+
+		setupSwagger(app);
 
 		app.use(errorHandler);
 

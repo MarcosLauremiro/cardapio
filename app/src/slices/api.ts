@@ -4,7 +4,7 @@ const baseUrl = import.meta.env.VITE_REACT_API_URL;
 
 export const apiSlice = createApi({
 	reducerPath: "api",
-	tagTypes: ["Categories"],
+	tagTypes: ["Categories", "Products"],
 	endpoints: () => ({}),
 	baseQuery: fetchBaseQuery({
 		baseUrl,

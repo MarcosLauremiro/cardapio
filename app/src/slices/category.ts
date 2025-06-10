@@ -1,24 +1,24 @@
 import type { RootState } from "../store/store";
 import type { Category } from "../types/category.type";
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { apiSlice } from "./api";
 
 const endPointUrl: string = "/categories";
 
 export const categoriesApiSlice = apiSlice.injectEndpoints({
-	endpoints: ({ query, mutation }) => ({
-		getCategories: query<Category[], void>({
+	endpoints: (build) => ({
+		getCategories: build.query<Category[], void>({
 			query: () => endPointUrl,
 			providesTags: ["Categories"],
 		}),
-		deleteCategory: mutation<void, { id: string }>({
+		deleteCategory: build.mutation<void, { id: string }>({
 			query: ({ id }) => ({
 				url: `${endPointUrl}/${id}`,
 				method: "DELETE",
 			}),
 			invalidatesTags: ["Categories"],
 		}),
-		createCategory: mutation<Category, Partial<Category>>({
+		createCategory: build.mutation<Category, Partial<Category>>({
 			query: (newCategory) => ({
 				url: endPointUrl,
 				method: "POST",
@@ -26,66 +26,60 @@ export const categoriesApiSlice = apiSlice.injectEndpoints({
 			}),
 			invalidatesTags: ["Categories"],
 		}),
-		updateCategory: mutation<Category, { id: string; data: Partial<Category> }>(
-			{
-				query: ({ id, data }) => ({
-					url: `${endPointUrl}/${id}`,
-					method: "PUT",
-					body: data,
-				}),
-				invalidatesTags: ["Categories"],
-			}
-		),
+		updateCategory: build.mutation<
+			Category,
+			{ id: string; data: Partial<Category> }
+		>({
+			query: ({ id, data }) => ({
+				url: `${endPointUrl}/${id}`,
+				method: "PUT",
+				body: data,
+			}),
+			invalidatesTags: ["Categories"],
+		}),
 	}),
 });
 
-//results resposta de toda a requsiçao
-
-const category: Category = {
-	_id: "37q89e98rq07ert8q74878q",
-	name: "Pizza",
-	icon: "🍕",
-	isActive: true,
-};
-
-const categories = [
-	category,
-	{ ...category, id: "68405248395t2-4tyu8", name: "saladas", icon: "🥗" },
-	{ ...category, id: "68405248312452wedf1", name: "Sobremesas", icon: "🍦" },
-	{ ...category, id: "6840524832454256rf1t4", name: "Bebidas", icon: "🍹" },
-];
-
-export const initialState = categories;
+export const initialState: Category[] = [];
 
 const categoriesSlice = createSlice({
 	name: "categories",
-	initialState: initialState,
+	initialState,
 	reducers: {
 		createCategory(state, action) {
-			const newCategory = {
-				...action.payload,
-				id: Math.random().toString(36).substring(2, 15), // Simple ID generation
-			};
+			const newCategory = action.payload;
 			state.push(newCategory);
 		},
 		updateCategory(state, action) {
 			const index = state.findIndex(
 				(category) => category._id === action.payload.id
 			);
-			state[index] = action.payload;
+			if (index !== -1) {
+				state[index] = { ...state[index], ...action.payload.data };
+			}
 		},
 		deleteCategory(state, action) {
 			const index = state.findIndex(
 				(category) => category._id === action.payload.id
 			);
-			state.slice(index, 1);
+			if (index !== -1) {
+				state.splice(index, 1);
+			}
 		},
+	},
+	extraReducers: (builder) => {
+		builder.addMatcher(
+			categoriesApiSlice.endpoints.getCategories.matchFulfilled,
+			(state, { payload }: PayloadAction<Category[]>) => {
+				return payload;
+			}
+		);
 	},
 });
 
 //selectors
 
-export const selectCategories = (state: RootState) => state.categories;
+export const listCategories = (state: RootState) => state.categories;
 
 export const selectCategoryById = (state: RootState, id: string) =>
 	state.categories.find((category) => category._id === id);

@@ -5,11 +5,13 @@ import {
 } from "@reduxjs/toolkit";
 import categoriesReducer from "../slices/category";
 import { apiSlice } from "../slices/api";
+import ProductsReducer from "../slices/product";
 
 export const store = configureStore({
 	reducer: {
 		categories: categoriesReducer,
 		[apiSlice.reducerPath]: apiSlice.reducer,
+		products: ProductsReducer,
 	},
 
 	middleware: (getDefaultMiddleware) =>

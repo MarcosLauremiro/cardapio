@@ -21,7 +21,7 @@
 ## 2. Backend (API)
 
 ### 2.1. Estrutura e Organização
-- [ ] Validar estrutura de pastas:
+- [x] Validar estrutura de pastas:
   - `src/controllers/`  
   - `src/services/`
   - `src/middleware/`

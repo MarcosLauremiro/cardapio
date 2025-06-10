@@ -4,7 +4,7 @@ export interface Product {
 	description?: string;
 	imagePath?: string;
 	price?: number;
-	ingredients?: Ingredients[];
+	ingredients: Ingredients[];
 	category?: string;
 	establishment?: string;
 	active?: boolean;

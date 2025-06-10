@@ -14,14 +14,14 @@ export async function listProducts(req: Request, res: Response) {
 export async function createProducts(req: Request, res: Response) {
 	try {
 		const establishmentId = res.locals.establishmentId as string;
-		const imagePath = req.file?.filename;
+		const imageUrl = req.file?.path;
 		const { name, description, price, category, ingredients } = req.body;
 
 		const product = await Product.create({
 			name,
 			description,
 			price: Number(price),
-			imagePath: imagePath,
+			imagePath: imageUrl,
 			category,
 			ingredients: ingredients ? JSON.parse(ingredients) : [],
 			establishment: establishmentId,
