@@ -2,8 +2,9 @@ import multer from "multer";
 import { Router } from "express";
 import {
 	createProducts,
-	deletProducts,
+	deleteProducts,
 	listProducts,
+	updateProducts,
 } from "../controller/ProductController";
 import { ensureAuth } from "../middleware/AuthMiddlewate";
 import { v2 as cloudinary } from "cloudinary";
@@ -29,10 +30,17 @@ export const upload = multer({ storage });
 export const productRouter = Router();
 
 //list products
-productRouter.get("/", listProducts);
+productRouter.get("/", ensureAuth, listProducts);
 
 //create product
 productRouter.post("/", upload.single("image"), ensureAuth, createProducts);
 
 //delet products
-productRouter.delete("/:productId", deletProducts);
+productRouter.delete("/:productId", ensureAuth, deleteProducts);
+
+productRouter.put(
+	"/:productId",
+	upload.single("image"),
+	ensureAuth,
+	updateProducts
+);

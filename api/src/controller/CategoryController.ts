@@ -6,7 +6,7 @@ import { createCategoryService } from "../service/CategorySercice";
 import { HttpError } from "../middleware/HttpError";
 
 export async function listCategories(req: Request, res: Response) {
-	const categories = await Category.find().sort({ nome: 1 });
+	const categories = await Category.find().sort({ name: 1 });
 	res.json(categories);
 }
 

@@ -2,6 +2,7 @@ import type { RootState } from "../store/store";
 import type { Category } from "../types/category.type";
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { apiSlice } from "./api";
+import type { Product } from "../types/product.type";
 
 const endPointUrl: string = "/categories";
 
@@ -36,6 +37,13 @@ export const categoriesApiSlice = apiSlice.injectEndpoints({
 				body: data,
 			}),
 			invalidatesTags: ["Categories"],
+		}),
+		getProductsByCategory: build.query<Product[], { id: string }>({
+			query: ({ id }) => ({
+				url: `${endPointUrl}/${id}/products`,
+				method: "GET",
+			}),
+			providesTags: ["Products"],
 		}),
 	}),
 });
@@ -77,8 +85,6 @@ const categoriesSlice = createSlice({
 	},
 });
 
-//selectors
-
 export const listCategories = (state: RootState) => state.categories;
 
 export const selectCategoryById = (state: RootState, id: string) =>
@@ -93,4 +99,5 @@ export const {
 	useDeleteCategoryMutation,
 	useCreateCategoryMutation,
 	useUpdateCategoryMutation,
+	useGetProductsByCategoryQuery,
 } = categoriesApiSlice;

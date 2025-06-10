@@ -29,36 +29,36 @@
   - `src/routes/`
   - `src/utils/` (helpers, validações, erros)
   - `src/config/` (variáveis de ambiente, conexões)
-- [ ] Adicionar documentação interna nos controllers e serviços (JSDoc ou comentários curtos).
+- [x] Adicionar documentação interna nos controllers e serviços (JSDoc ou comentários curtos).
 
 ### 2.2. Autenticação e Autorização
-- [ ] Implementar middleware de autenticação JWT:
+- [x] Implementar middleware de autenticação JWT:
   - Verificar se o token é válido e extrair `userId` ou `establishmentId`.
-- [ ] Criar middleware de autorização:
+- [x] Criar middleware de autorização:
   - Verificar permissões (por exemplo, usuário “Estabelecimento” vs. cliente).
-- [ ] Rotas protegidas:
+- [x] Rotas protegidas:
   - Garantir que todas as rotas de criação/edição/deleção exijam autenticação.
   - Verificar se o recurso (pedido, categoria, produto) pertence ao estabelecimento autenticado.
 
 ### 2.3. Validações e Tratamento de Erros
 - [ ] Usar `express-validator` ou similar para checagens básicas (string vazia, formatos, tipos, etc.).
-- [ ] Criar classes/handlers de erro personalizados (por exemplo, `HttpError`).
-- [ ] Garantir que o `errorHandler` padronize respostas JSON:
+- [x] Criar classes/handlers de erro personalizados (por exemplo, `HttpError`).
+- [x] Garantir que o `errorHandler` padronize respostas JSON:
   - `{ status: <código>, message: <descrição> }`.
   - Logar erros internos (call stack) em `console.error` ou serviço de log.
-- [ ] Tratar erros de banco (duplicidade de chave, referências não encontradas) com mensagens amigáveis.
+- [x] Tratar erros de banco (duplicidade de chave, referências não encontradas) com mensagens amigáveis.
 
 ### 2.4. Banco de Dados (Mongoose/MongoDB)
-- [ ] Modelos (`src/models/Category.ts`, `Product.ts`, `Order.ts`, `User.ts`, etc.) com tipos e validações:
+- [x] Modelos (`src/models/Category.ts`, `Product.ts`, `Order.ts`, `User.ts`, etc.) com tipos e validações:
   - Campos obrigatórios, tipos, índices (ex.: índice único em `Category` por estabelecimento e nome).
-- [ ] Conexão ao MongoDB:
+- [x] Conexão ao MongoDB:
   - Carregar URI via `process.env.MONGODB_URI`.
   - Tratar falhas de conexão no `startup` (ex.: encerrar aplicação se não conectar).
-- [ ] Queries otimizadas:
+- [x] Queries otimizadas:
   - Usar `.lean()` onde apropriado para objetos simples.
   - Populações (`populate`) somente quando necessário.
   - Paginação (ex.: `limit`/`skip`) em endpoints que retornam listas grandes.
-- [ ] Migrations ou seeders (se necessário) para dados iniciais de teste.
+- [x] Migrations ou seeders (se necessário) para dados iniciais de teste.
 
 ### 2.5. Endpoints da API
 
@@ -98,21 +98,21 @@
 - [x] **Deletar categoria**:
   - Path: `/categories/:id`
   - Soft delete (marcar `isActive = false`) ou hard delete? (decidir e implementar).
-- [ ] **Listar produtos por categoria**:
+- [x] **Listar produtos por categoria**:
   - Endpoint separado: `/categories/:id/products`.
   - Validar existência de `categoriaId`.
   - Retornar array de objetos de produto (id, nome, preço, imagemUrl, descrição).
   - Filtros adicionais (ex.: somente ativos).
-- [ ] **Gerenciar ordenação**:
+- [x] **Gerenciar ordenação**:
   - Incluir campo `orderIndex` ou similar para definir ordem customizada.
 
 #### 2.5.3. Produtos
-- [ ] **Listar produtos**:
+- [x] **Listar produtos**:
   - Retornar array: `{ id, nome, descricao, preco, imagemUrl, categoriaId (ou objeto completo) }`.
   - Filtros: nome (regex), faixa de preço, categoria.
   - Ordenação: por nome ou data de criação.
   - Paginação: `page`, `limit`.
-- [ ] **Criar produto**:
+- [x] **Criar produto**:
   - Body: `{ nome, descricao, preco, imagemUrl, categoriaId }`.
   - Autenticação: Estabelecimento.
   - Validar:

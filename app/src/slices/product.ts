@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import type { Product } from "../types/product.type";
+import type { Product, Result } from "../types/product.type";
 import { apiSlice } from "./api";
 import type { RootState } from "../store/store";
 
@@ -7,8 +7,9 @@ const endPointUrl: string = "/products";
 
 export const productsApiSlice = apiSlice.injectEndpoints({
 	endpoints: ({ query, mutation }) => ({
-		getProducts: query<Product[], void>({
-			query: () => endPointUrl,
+		getProducts: query<Result, { page?: number; limit?: number }>({
+			query: ({ page = 1, limit = 10 } = {}) =>
+				`products?page=${page}&limit=${limit}`,
 			providesTags: ["Products"],
 		}),
 		createProduct: mutation<Product, FormData>({
@@ -85,14 +86,14 @@ const productsSlice = createSlice({
 		},
 		updateProduct(state, action) {
 			const index = state.findIndex(
-				(product) => product.id === action.payload.id
+				(product) => product._id === action.payload.id
 			);
 
 			state[index] = action.payload;
 		},
 		deleteProduct(state, action) {
 			const index = state.findIndex(
-				(category) => category.id === action.payload.id
+				(category) => category._id === action.payload.id
 			);
 			state.slice(index, 1);
 		},

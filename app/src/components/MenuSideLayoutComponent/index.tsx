@@ -3,17 +3,17 @@ import {
 	FiHome,
 	FiClock,
 	FiClipboard,
-	FiUsers,
 	FiUser,
 	FiLogOut,
 } from "react-icons/fi";
+import { MdOutlineRestaurantMenu } from "react-icons/md";
 
 export const MenuSide: React.FC = () => {
 	const links = [
 		{ to: "/", label: "Home", icon: <FiHome /> },
 		{ to: "/history", label: "Histórico", icon: <FiClock /> },
-		{ to: "/menu", label: "Cardápio", icon: <FiClipboard /> },
-		{ to: "/usuarios", label: "Usuários", icon: <FiUsers /> },
+		{ to: "/products", label: "Produtos", icon: <FiClipboard /> },
+		{ to: "/menu", label: "Cardapio", icon: <MdOutlineRestaurantMenu /> },
 	];
 
 	const bottomLinks = [

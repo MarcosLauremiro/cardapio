@@ -4,13 +4,20 @@ import { useState, type FormEvent, type ChangeEvent } from "react";
 import toast from "react-hot-toast";
 import {
 	useCreateProductMutation,
+	useDeleteProductMutation,
 	useUpdateProductMutation,
 } from "../../slices/product";
 import { useAppSelector } from "../../store/hooks";
+import { FaRegTrashAlt, FaPlus, FaTimes } from "react-icons/fa";
 
 interface ProductModalProps {
 	editingProduct: Product | null;
 	setShowProductModalClose: () => void;
+}
+
+export interface Ingredients {
+	name: string;
+	icon: string;
 }
 
 type ProductFormState = Omit<Product, "imagePath"> & {
@@ -30,16 +37,24 @@ export const ProductModal = ({
 		category: editingProduct?.category || "",
 		establishment: editingProduct?.establishment || "",
 		active: editingProduct?.active ?? true,
-		id: editingProduct?.id,
+		_id: editingProduct?._id,
 		imagePath: editingProduct?.imagePath || "",
 	});
 	const [preview, setPreview] = useState<string>(
 		editingProduct?.imagePath || ""
 	);
 	const [submitting, setSubmitting] = useState(false);
+
+	// Estados para o formulário de ingredientes
+	const [newIngredient, setNewIngredient] = useState<Ingredients>({
+		name: "",
+		icon: "",
+	});
+
 	const categories = useAppSelector(listCategories);
 	const [createProduct] = useCreateProductMutation();
 	const [updateProduct] = useUpdateProductMutation();
+	const [deleteProduct] = useDeleteProductMutation();
 
 	const handleChange = (
 		e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -64,19 +79,68 @@ export const ProductModal = ({
 		}
 	};
 
-	const buildFormData = () => {
-		const fd = new FormData();
-		fd.append("name", product.name ?? "");
-		fd.append("description", product.description ?? "");
-		fd.append("price", (product.price ?? 0).toString());
-		fd.append("ingredients", JSON.stringify(product.ingredients ?? []));
-		fd.append("category", product.category ?? "");
-		fd.append("establishment", product.establishment ?? "");
-		fd.append("active", product.active ? "true" : "false");
-		if (product.imageFile) {
-			fd.append("image", product.imageFile);
+	// Função para adicionar ingrediente
+	const handleAddIngredient = () => {
+		if (!newIngredient.name.trim()) {
+			toast.error("Por favor, informe o nome do ingrediente");
+			return;
 		}
-		return fd;
+
+		const ingredient: Ingredients = {
+			name: newIngredient.name.trim(),
+			icon: newIngredient.icon.trim() || "🥄",
+		};
+
+		setProduct((prev) => ({
+			...prev,
+			ingredients: [...(prev.ingredients || []), ingredient],
+		}));
+
+		// Limpar o formulário
+		setNewIngredient({ name: "", icon: "" });
+	};
+
+	// Função para remover ingrediente
+	const handleRemoveIngredient = (index: number) => {
+		setProduct((prev) => ({
+			...prev,
+			ingredients: prev.ingredients?.filter((_, i) => i !== index) || [],
+		}));
+	};
+
+	const handleIngredientChange = (
+		e: ChangeEvent<HTMLInputElement>,
+		field: keyof Ingredients
+	) => {
+		setNewIngredient((prev) => ({
+			...prev,
+			[field]: e.target.value,
+		}));
+	};
+
+	const handleDeleteProduct = async () => {
+		console.log("establi id", editingProduct);
+		await deleteProduct({ id: editingProduct?._id as string });
+		setShowProductModalClose();
+	};
+
+	const buildFormData = () => {
+		const formData = new FormData();
+		formData.append("name", product.name ?? "");
+		formData.append("description", product.description ?? "");
+		formData.append("price", (product.price ?? 0).toString());
+
+		if (product.ingredients && product.ingredients.length > 0) {
+			formData.append("ingredients", JSON.stringify(product.ingredients));
+		}
+
+		formData.append("category", product.category ?? "");
+		formData.append("establishment", product.establishment ?? "");
+		formData.append("active", product.active ? "true" : "false");
+		if (product.imageFile) {
+			formData.append("image", product.imageFile);
+		}
+		return formData;
 	};
 
 	const handleSubmit = async (e: FormEvent) => {
@@ -87,15 +151,18 @@ export const ProductModal = ({
 		}
 
 		setSubmitting(true);
-		const fd = buildFormData();
+		const formData = buildFormData();
 
 		try {
 			if (editingProduct) {
-				// endpoint de update deve aceitar FormData
-				await updateProduct({ id: editingProduct.id!, data: fd }).unwrap();
+				console.log(Array.from(formData.entries()));
+				await updateProduct({
+					id: editingProduct._id!,
+					data: formData,
+				}).unwrap();
 				toast.success("Produto editado com sucesso");
 			} else {
-				await createProduct(fd).unwrap();
+				await createProduct(formData).unwrap();
 				toast.success("Produto criado com sucesso");
 			}
 			setShowProductModalClose();
@@ -109,7 +176,7 @@ export const ProductModal = ({
 
 	return (
 		<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-			<div className="bg-white rounded-lg p-6 w-full max-w-2xl">
+			<div className="bg-white rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
 				<h2 className="text-xl font-bold mb-4">
 					{editingProduct ? "Editar Produto" : "Novo Produto"}
 				</h2>
@@ -153,6 +220,8 @@ export const ProductModal = ({
 								value={product.price}
 								onChange={handleChange}
 								type="number"
+								step="0.01"
+								min="0"
 								className="mt-1 block w-full px-3 py-2 border rounded-md focus:ring-green-500 focus:border-green-500"
 							/>
 						</div>
@@ -173,6 +242,69 @@ export const ProductModal = ({
 									</option>
 								))}
 							</select>
+						</div>
+					</div>
+
+					{/* Ingredientes */}
+					<div>
+						<label className="block text-sm font-medium text-gray-700 mb-2">
+							Ingredientes
+						</label>
+
+						{/* Lista de ingredientes existentes */}
+						{product.ingredients && product.ingredients.length > 0 && (
+							<div className="mb-3">
+								<div className="flex flex-wrap gap-2">
+									{product.ingredients.map((ingredient, index) => (
+										<div
+											key={index}
+											className="flex items-center gap-2 bg-gray-100 px-3 py-1 rounded-full text-sm"
+										>
+											<span>{ingredient.icon || "🥄"}</span>
+											<span>{ingredient.name}</span>
+											<button
+												type="button"
+												onClick={() => handleRemoveIngredient(index)}
+												className="text-red-500 hover:text-red-700"
+											>
+												<FaTimes size={12} />
+											</button>
+										</div>
+									))}
+								</div>
+							</div>
+						)}
+
+						{/* Formulário para adicionar novo ingrediente */}
+						<div className="border rounded-md p-3 bg-gray-50">
+							<div className="grid grid-cols-3 gap-2 mb-2">
+								<div className="col-span-2">
+									<input
+										type="text"
+										placeholder="Nome do ingrediente"
+										value={newIngredient.name}
+										onChange={(e) => handleIngredientChange(e, "name")}
+										className="w-full px-2 py-1 border rounded text-sm focus:ring-green-500 focus:border-green-500"
+									/>
+								</div>
+								<div>
+									<input
+										type="text"
+										placeholder="Ícone (emoji)"
+										value={newIngredient.icon}
+										onChange={(e) => handleIngredientChange(e, "icon")}
+										className="w-full px-2 py-1 border rounded text-sm text-center focus:ring-green-500 focus:border-green-500"
+									/>
+								</div>
+							</div>
+							<button
+								type="button"
+								onClick={handleAddIngredient}
+								className="flex items-center gap-1 bg-green-600 text-white px-3 py-1 rounded-md hover:bg-green-700 text-sm"
+							>
+								<FaPlus size={12} />
+								Adicionar Ingrediente
+							</button>
 						</div>
 					</div>
 
@@ -217,22 +349,41 @@ export const ProductModal = ({
 					</div>
 
 					{/* Botões */}
-					<div className="flex justify-end gap-2 pt-4">
-						<button
-							type="button"
-							className="bg-gray-200 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-300"
-							onClick={setShowProductModalClose}
-							disabled={submitting}
-						>
-							Cancelar
-						</button>
-						<button
-							type="submit"
-							className="bg-green-700 text-white px-4 py-2 rounded-md hover:bg-green-600 disabled:opacity-50"
-							disabled={submitting}
-						>
-							{editingProduct ? "Atualizar" : "Criar"}
-						</button>
+					<div className="flex justify-between">
+						{editingProduct ? (
+							<div className="flex justify-start gap-2 pt-4">
+								<button
+									className="bg-red-600 text-gray-50 rounded-md px-4 py-2 hover:bg-red-700"
+									type="button"
+									onClick={(e) => {
+										e.preventDefault();
+										handleDeleteProduct();
+									}}
+								>
+									<FaRegTrashAlt />
+								</button>
+							</div>
+						) : (
+							<div></div>
+						)}
+
+						<div className="flex justify-end gap-2 pt-4">
+							<button
+								type="button"
+								className="bg-gray-200 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-300"
+								onClick={setShowProductModalClose}
+								disabled={submitting}
+							>
+								Cancelar
+							</button>
+							<button
+								type="submit"
+								className="bg-green-700 text-white px-4 py-2 rounded-md hover:bg-green-600 disabled:opacity-50"
+								disabled={submitting}
+							>
+								{editingProduct ? "Atualizar" : "Criar"}
+							</button>
+						</div>
 					</div>
 				</form>
 			</div>

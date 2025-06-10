@@ -6,7 +6,7 @@ import { ProductModal } from "../../components/ModalProductComponent";
 import { CardCategory } from "../../components/CardCategoryComponent";
 import { CardProduct } from "../../components/CardProductComponent";
 
-export const Menu = () => {
+export const Products = () => {
 	const [showProductModal, setShowProductModal] = useState(false);
 	const [showCategoryModal, setShowCategoryModal] = useState(false);
 	const [editingProduct, setEditingProduct] = useState<Product | null>(null);
