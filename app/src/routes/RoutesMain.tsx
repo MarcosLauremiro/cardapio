@@ -4,9 +4,10 @@ import { Register } from "../pages/register";
 import { Dashboard } from "../pages/dashboard";
 import { Layout } from "../components/LayoutComponent";
 import { Home } from "../pages/home";
-import { Products } from "../pages/menu";
+import { Products } from "../pages/Product";
 import { Account } from "../pages/account";
 import { History } from "../pages/history";
+import { Menu } from "../pages/menu";
 
 export const RoutesMain = () => {
 	return (
@@ -43,6 +44,14 @@ export const RoutesMain = () => {
 				element={
 					<Layout>
 						<Products />
+					</Layout>
+				}
+			/>
+			<Route
+				path="/menu"
+				element={
+					<Layout>
+						<Menu />
 					</Layout>
 				}
 			/>
