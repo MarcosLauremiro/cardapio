@@ -8,9 +8,20 @@ export function setupSwagger(app: Express) {
 		definition: {
 			openapi: "3.0.0",
 			info: {
-				title: "Minha API Express",
+				title: "Establishment API",
 				version: "1.0.0",
-				description: "Documentação automática gerada pelo swagger-jsdoc",
+				description:
+					"API para gerenciamento de estabelecimentos com sistema de assinatura",
+			},
+			components: {
+				securitySchemes: {
+					bearerAuth: {
+						type: "http",
+						scheme: "bearer",
+						bearerFormat: "JWT",
+						description: "Token JWT obtido no endpoint de login",
+					},
+				},
 			},
 		},
 		apis: [path.resolve(__dirname, "../routes/*.ts")],

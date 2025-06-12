@@ -5,7 +5,7 @@ export const authRoutes = Router();
 
 /**
  * @openapi
- * /login:
+ * /auth/login:
  *   post:
  *     summary: Autentica usuário e retorna token
  *     tags:
@@ -45,7 +45,7 @@ authRoutes.post("/login", loginHandle);
 
 /**
  * @openapi
- * /register:
+ * /auth/register:
  *   post:
  *     summary: Cria um novo usuário
  *     tags:
@@ -60,8 +60,11 @@ authRoutes.post("/login", loginHandle);
  *               - name
  *               - email
  *               - password
+ *               - phone
  *             properties:
  *               name:
+ *                 type: string
+ *               phone:
  *                 type: string
  *               email:
  *                 type: string

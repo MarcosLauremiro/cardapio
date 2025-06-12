@@ -13,7 +13,7 @@ export const RoutesMain = () => {
 	return (
 		<Routes>
 			<Route
-				path="/"
+				path="/home"
 				element={
 					<Layout>
 						<Home />
@@ -22,7 +22,8 @@ export const RoutesMain = () => {
 			/>
 			<Route path="/login" element={<Login />} />
 			<Route path="/register" element={<Register />} />
-			<Route path="/home" element={<Dashboard />} />
+			<Route path="" element={<Dashboard />} />
+			<Route path="/plan" element={<Dashboard />} />
 			<Route
 				path="/accout"
 				element={

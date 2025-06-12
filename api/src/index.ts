@@ -50,7 +50,7 @@ mongoose
 			"/uploads",
 			express.static(path.resolve(__dirname, "..", "uploads"))
 		);
-		app.use("/", authRoutes);
+		app.use("/auth", authRoutes);
 
 		setupSwagger(app);
 
