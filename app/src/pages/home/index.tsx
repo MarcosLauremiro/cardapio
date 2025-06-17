@@ -91,7 +91,6 @@ export const Home = () => {
 	]);
 
 	const [activeOrder, setActiveOrder] = useState<Order | null>(null);
-	console.log(activeOrder);
 
 	const sensors = useSensors(
 		useSensor(PointerSensor, {

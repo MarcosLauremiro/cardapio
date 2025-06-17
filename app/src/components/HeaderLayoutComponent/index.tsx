@@ -4,6 +4,7 @@ type HeaderProps = {
 };
 
 export const Header = ({ page }: HeaderProps) => {
+
   return (
     <header className="flex items-center justify-between h-16 px-6 shadow">
       <h1 className="text-xl font-semibold text-[var(--color-text)]">{page}</h1>

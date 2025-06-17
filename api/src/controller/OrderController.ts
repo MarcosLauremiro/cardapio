@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { Order } from "../models/Order";
 import { createOrderService } from "../service/OrderService";
 import { HttpError } from "../middleware/HttpError";
-import { wsClients } from "..";
+import { wsClients } from "../config/websocket";
 
 //listar pedidos
 //GET /orders?page=2&perPage=20
@@ -26,21 +26,32 @@ export async function listOrder(req: Request, res: Response) {
 //criar pedido
 export async function createOrder(req: Request, res: Response) {
 	try {
-		const establishmentId = req.body.establishmentId;
-		const { table, products, customerName } = req.body;
+		const {
+			establishmentId,
+			table,
+			products,
+			customerName,
+			delivery,
+			payment,
+			customerPhone,
+		} = req.body;
+
 		const newOrderDoc = await createOrderService({
 			establishmentId,
 			table,
 			products,
 			customerName,
+			delivery,
+			payment,
+			customerPhone,
 		});
 
 		const payload = {
 			type: "NEW_ORDER",
 			data: newOrderDoc,
 		};
-		const sockets = wsClients.get(establishmentId);
 
+		const sockets = wsClients.get(establishmentId);
 		if (sockets) {
 			const message = JSON.stringify(payload);
 			for (const clientSocket of sockets) {
@@ -49,14 +60,15 @@ export async function createOrder(req: Request, res: Response) {
 				}
 			}
 		}
+
 		res.status(201).json({
 			id: newOrderDoc._id,
 			status: newOrderDoc.status,
 			mensagem: "Pedido realizado com sucesso!",
 		});
 	} catch (error) {
-		console.log(error);
-		res.status(500);
+		console.error("Erro ao criar pedido:", error);
+		new HttpError(500, "Erro ao criar pedido");
 	}
 }
 

@@ -1,11 +1,6 @@
 import { NavLink } from "react-router-dom";
-import {
-	FiHome,
-	FiClock,
-	FiClipboard,
-	FiUser,
-	FiLogOut,
-} from "react-icons/fi";
+import { FiHome, FiClock, FiClipboard, FiUser } from "react-icons/fi";
+import { GrConfigure } from "react-icons/gr";
 import { MdOutlineRestaurantMenu } from "react-icons/md";
 
 export const MenuSide: React.FC = () => {
@@ -18,7 +13,7 @@ export const MenuSide: React.FC = () => {
 
 	const bottomLinks = [
 		{ to: "/accout", label: "Minha Conta", icon: <FiUser /> },
-		{ to: "/sair", label: "Sair", icon: <FiLogOut /> },
+		{ to: "/configure", label: "Ajustes", icon: <GrConfigure /> },
 	];
 
 	return (

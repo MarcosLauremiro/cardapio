@@ -43,7 +43,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
 
 const loadTokenFromStorage = (): string | null => {
 	try {
-		return localStorage.getItem("authToken");
+		return localStorage.getItem("@EstablishmentToken");
 	} catch {
 		return null;
 	}
@@ -51,8 +51,8 @@ const loadTokenFromStorage = (): string | null => {
 
 const loadUserFromStorage = (): AuthResponse | null => {
 	try {
-		const user = localStorage.getItem("authUser");
-		return user ? JSON.parse(user) : null;
+		const auth = localStorage.getItem("@EstablishmentToken");
+		return auth ? JSON.parse(auth) : null;
 	} catch {
 		return null;
 	}
@@ -75,8 +75,7 @@ const authSlice = createSlice({
 			state.Establishment = action.payload;
 			state.isAuthenticated = true;
 
-			localStorage.setItem("authToken", token);
-			localStorage.setItem("authUser", JSON.stringify(action.payload));
+			localStorage.setItem("@EstablishmentToken", token);
 		},
 		logout: (state) => {
 			state.token = null;
@@ -84,8 +83,7 @@ const authSlice = createSlice({
 			state.isAuthenticated = false;
 
 			// Remover do localStorage
-			localStorage.removeItem("authToken");
-			localStorage.removeItem("authUser");
+			localStorage.removeItem("@EstablishmentToken");
 		},
 		setLoading: (state, action: PayloadAction<boolean>) => {
 			state.isLoading = action.payload;

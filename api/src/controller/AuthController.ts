@@ -5,7 +5,6 @@ import bcrypt from "bcryptjs";
 
 export async function loginHandle(req: Request, res: Response) {
 	const { email, password } = req.body;
-	console.log("veio aqui no controller");
 	try {
 		const establishment = await Establishment.findOne({ email });
 		if (!establishment) {

@@ -1,4 +1,3 @@
-import multer from "multer";
 import { Router } from "express";
 import {
 	createProducts,
@@ -6,26 +5,8 @@ import {
 	listProducts,
 	updateProducts,
 } from "../controller/ProductController";
-import { ensureAuth } from "../middleware/AuthMiddlewate";
-import { v2 as cloudinary } from "cloudinary";
-import dotenv from "dotenv";
-import { CloudinaryStorage } from "multer-storage-cloudinary";
-dotenv.config();
-
-cloudinary.config({
-	cloud_name: process.env.CLOUD_NAME!,
-	api_key: process.env.CLOUD_API_KEY!,
-	api_secret: process.env.CLOUD_API_SECRET!,
-});
-
-const storage = new CloudinaryStorage({
-	cloudinary,
-	params: {
-		public_id: () => `produto_${Date.now()}`,
-	},
-});
-
-export const upload = multer({ storage });
+import { ensureAuth } from "../middleware/authMiddlewate";
+import { upload } from "../controller/UploadController";
 
 export const productRouter = Router();
 
@@ -112,39 +93,53 @@ productRouter.get("/", ensureAuth, listProducts);
  *   post:
  *     tags:
  *       - Produtos
- *     summary: Buscar todos os produtos do estabelecimento
- *     description: Retorna os dados dos produtos do estabelecimento
+ *     summary: Cria um novo produto
+ *     description: Envia uma imagem e os dados do produto via FormData
  *     security:
  *       - bearerAuth: []
- *     responses:
- *       200:
- *         description: Produtos Listados
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 name:
- *                   type: string
- *                 description:
- *                   type: string
- *                 imagePath:
- *                   type: string
- *                 price:
- *                   type: number
- *                 ingredients:
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *               - description
+ *               - price
+ *               - category
+ *               - establishment
+ *               - image
+ *             properties:
+ *               name:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               price:
+ *                 type: number
+ *               category:
+ *                 type: string
+ *               establishment:
+ *                 type: string
+ *               active:
+ *                 type: boolean
+ *               ingredients:
+ *                 type: array
+ *                 items:
  *                   type: object
  *                   properties:
  *                     name:
  *                       type: string
  *                     icon:
  *                       type: string
- *                 category:
- *                   type: string
- *                 establishment:
- *                   type: string
- *                 active:
- *                   type: boolean
+ *               image:
+ *                 type: string
+ *                 format: binary
+ *     responses:
+ *       201:
+ *         description: Produto criado com sucesso
+ *       400:
+ *         description: Erro na criação do produto
  */
 productRouter.post("/", upload.single("image"), ensureAuth, createProducts);
 
@@ -172,7 +167,6 @@ productRouter.post("/", upload.single("image"), ensureAuth, createProducts);
  *       404:
  *         description: Produto não encontrado
  */
-
 productRouter.delete("/:productId", ensureAuth, deleteProducts);
 
 /**

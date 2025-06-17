@@ -5,19 +5,20 @@ import { Product } from "../models/Product";
 import { CreateOrderDTO } from "../types/express/types";
 
 export async function createOrderService(dto: CreateOrderDTO) {
-	const { customerName, table, products, establishmentId } = dto;
+	const {
+		customerName,
+		table,
+		products,
+		establishmentId,
+		delivery,
+		payment,
+		customerPhone,
+	} = dto;
 
-	if (!customerName.trim) {
+	if (!customerName?.trim()) {
 		throw new HttpError(
 			400,
 			"Por favor, informe um nome para referência do pedido."
-		);
-	}
-
-	if (!table?.trim()) {
-		throw new HttpError(
-			400,
-			"Por favor, informe o número da mesa ou o endereço para entrega."
 		);
 	}
 
@@ -26,6 +27,29 @@ export async function createOrderService(dto: CreateOrderDTO) {
 			400,
 			"Seu carrinho está vazio. Adicione itens antes de finalizar o pedido."
 		);
+	}
+
+	// Se for delivery, exige endereço
+	if (delivery?.isDelivery) {
+		const { address } = delivery;
+		if (
+			!address?.street ||
+			!address?.number ||
+			!address?.neighborhood ||
+			!address?.city
+		) {
+			throw new HttpError(
+				400,
+				"Por favor, preencha todas as informações de endereço para entrega."
+			);
+		}
+	} else {
+		if (!table?.trim()) {
+			throw new HttpError(
+				400,
+				"Por favor, informe o número da mesa ou marque como entrega."
+			);
+		}
 	}
 
 	const establishment = await Establishment.findById(establishmentId).lean();
@@ -38,12 +62,14 @@ export async function createOrderService(dto: CreateOrderDTO) {
 	const todaySlot = establishment.schedule.find(
 		(s) => s.diaSemana === now.getDay()
 	);
+
 	if (!todaySlot || todaySlot.fechado) {
 		throw new HttpError(
 			400,
 			"Desculpe, o estabelecimento encontra-se fechado no momento e não está aceitando pedidos."
 		);
 	}
+
 	const toMins = (hhmm: string) => {
 		const [h, m] = hhmm.split(":").map(Number);
 		return h * 60 + m;
@@ -77,14 +103,18 @@ export async function createOrderService(dto: CreateOrderDTO) {
 				"Um ou mais itens do seu pedido não estão disponíveis ou não existem."
 			);
 		}
-		itemsToSave.push({ product: product, quantity: quantity });
+
+		itemsToSave.push({ product, quantity });
 	}
 
 	const order = await Order.create({
 		customerName,
-		table,
+		customerPhone,
+		table: delivery?.isDelivery ? undefined : table,
 		products: itemsToSave,
 		establishment: establishmentId,
+		delivery: delivery?.isDelivery ? delivery : { isDelivery: false },
+		payment: payment || {},
 	});
 
 	return order;

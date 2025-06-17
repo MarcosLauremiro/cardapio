@@ -129,3 +129,14 @@ body {
 	background-repeat: no-repeat;
 	background-size: cover;
 }
+
+.btn-disable {
+	background-color: var(--color-primary);
+}
+
+.btn-primary {
+	background-color: var(--color-primary);
+	&:hover {
+		background-color: var(--color-primary-dark);
+	}
+}
