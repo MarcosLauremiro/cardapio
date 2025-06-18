@@ -1,4 +1,7 @@
 import { useState } from "react";
+// import { useAppSelector } from "../../store/hooks";
+// import { setListUser } from "../../slices/auth";
+import { useUpdateSubscriptionMutation } from "../../slices/user";
 
 interface Plan {
 	id: string;
@@ -39,12 +42,16 @@ export const PricingPlans = () => {
 	// const user = useGetUserQuery();
 	// console.log("requisição", user);
 
+
+
+	const [subscribe] = useUpdateSubscriptionMutation();
+
 	const plans: Plan[] = [
 		{
 			id: "basic",
 			name: "Plano Básico",
-			price: 89,
-			originalPrice: 149,
+			price: 59,
+			originalPrice: 99,
 			discount: "-40%",
 			period: "Ago 2024 a Jan 2025",
 			features: [
@@ -104,7 +111,10 @@ export const PricingPlans = () => {
 
 		try {
 			// Simular processamento
-			await new Promise((resolve) => setTimeout(resolve, 2000));
+			await subscribe({
+				planId: selectedPlan?.id,
+				planName: selectedPlan?.name,
+			});
 
 			// Aqui você faria a chamada real para a API
 			console.log("Assinatura processada:", { plan: selectedPlan, formData });

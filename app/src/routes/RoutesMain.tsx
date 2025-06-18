@@ -10,41 +10,101 @@ import { Menu } from "../pages/menu";
 import { ProtectRoutes } from "./ProtectRoutes";
 import { PricingPlans } from "../pages/plan";
 import { ForgotPassword } from "../pages/forgot";
+import { setListUser } from "../slices/auth";
+import { useGetUserQuery } from "../slices/user";
+import { useAppSelector } from "../store/hooks";
+
+interface MiddlewareProps {
+	children: React.ReactNode;
+}
+
+// Componente de Loading
+const LoadingSpinner = () => (
+	<div
+		style={{
+			display: "flex",
+			justifyContent: "center",
+			alignItems: "center",
+			height: "100vh",
+			fontSize: "18px",
+		}}
+	>
+		<div>Carregando...</div>
+	</div>
+);
+
+const Middleware = ({ children }: MiddlewareProps) => {
+	const { data, error, isLoading } = useGetUserQuery();
+	const user = useAppSelector(setListUser);
+
+	if (isLoading) {
+		return <LoadingSpinner />;
+	}
+
+	if (error) {
+		console.error("Erro ao carregar usuário:", error);
+		return <Navigate to="/login" replace />;
+	}
+
+	if (
+		data?.status === "pending" ||
+		user?.response?.user?.status === "pending"
+	) {
+		return <Navigate to="/plan" replace />;
+	}
+
+	return <>{children}</>;
+};
 
 export const RoutesMain = () => {
-	// type UserStatus =
-	// 	| "pending"
-	// 	| "active"
-	// 	| "inactive"
-	// 	| "suspended"
-	// 	| "canceled"
-	// 	| undefined;
-	// const { data, isLoading, isError } = useGetUserQuery();
-
-	// const middlewarePlan = () => {
-	// 	const status = data?.status as UserStatus;
-	// 	if (
-	// 		status === "inactive" ||
-	// 		status === "suspended" ||
-	// 		status === "canceled"
-	// 	) {
-	// 		return <Navigate to="/plan" replace />;
-	// 	}
-	// };
-
 	const routesWithLayout = [
-		{ path: "/home", component: Home, protected: true },
-		{ path: "/accout", component: Account, protected: true },
-		{ path: "/history", component: History, protected: true },
-		{ path: "/menu", component: Menu, protected: true },
-		{ path: "/products", component: Products, protected: true },
+		{ path: "/home", component: Home, protected: true, useMiddleware: true },
+		{
+			path: "/account",
+			component: Account,
+			protected: true,
+			useMiddleware: true,
+		},
+		{
+			path: "/history",
+			component: History,
+			protected: true,
+			useMiddleware: false,
+		},
+		{ path: "/menu", component: Menu, protected: true, useMiddleware: true },
+		{
+			path: "/products",
+			component: Products,
+			protected: true,
+			useMiddleware: true,
+		},
 	];
 
 	const routesWithoutLayout = [
-		{ path: "/login", component: Login, protected: false },
-		{ path: "/register", component: Register, protected: false },
-		{ path: "/plan", component: PricingPlans, protected: true },
-		{ path: "/forgot-password", component: ForgotPassword, protected: false },
+		{
+			path: "/login",
+			component: Login,
+			protected: false,
+			useMiddleware: false,
+		},
+		{
+			path: "/register",
+			component: Register,
+			protected: false,
+			useMiddleware: false,
+		},
+		{
+			path: "/plan",
+			component: PricingPlans,
+			protected: true,
+			useMiddleware: false,
+		}, // Plan não deve usar middleware
+		{
+			path: "/forgot-password",
+			component: ForgotPassword,
+			protected: false,
+			useMiddleware: false,
+		},
 	];
 
 	return (
@@ -52,26 +112,24 @@ export const RoutesMain = () => {
 			<Route path="/" element={<Navigate to="/login" replace />} />
 
 			{routesWithoutLayout.map(
-				({ path, component: Component, protected: isProtected }) =>
-					isProtected ? (
-						<Route key={path} element={<ProtectRoutes />}>
-							<Route path={path} element={<Component />} />
-						</Route>
-					) : (
-						<Route key={path} path={path} element={<Component />} />
-					)
-			)}
-
-			{routesWithLayout.map(
-				({ path, component: Component, protected: isProtected }) =>
+				({
+					path,
+					component: Component,
+					protected: isProtected,
+					useMiddleware,
+				}) =>
 					isProtected ? (
 						<Route key={path} element={<ProtectRoutes />}>
 							<Route
 								path={path}
 								element={
-									<Layout>
+									useMiddleware ? (
+										<Middleware>
+											<Component />
+										</Middleware>
+									) : (
 										<Component />
-									</Layout>
+									)
 								}
 							/>
 						</Route>
@@ -80,9 +138,60 @@ export const RoutesMain = () => {
 							key={path}
 							path={path}
 							element={
-								<Layout>
+								useMiddleware ? (
+									<Middleware>
+										<Component />
+									</Middleware>
+								) : (
 									<Component />
-								</Layout>
+								)
+							}
+						/>
+					)
+			)}
+
+			{routesWithLayout.map(
+				({
+					path,
+					component: Component,
+					protected: isProtected,
+					useMiddleware,
+				}) =>
+					isProtected ? (
+						<Route key={path} element={<ProtectRoutes />}>
+							<Route
+								path={path}
+								element={
+									useMiddleware ? (
+										<Middleware>
+											<Layout>
+												<Component />
+											</Layout>
+										</Middleware>
+									) : (
+										<Layout>
+											<Component />
+										</Layout>
+									)
+								}
+							/>
+						</Route>
+					) : (
+						<Route
+							key={path}
+							path={path}
+							element={
+								useMiddleware ? (
+									<Middleware>
+										<Layout>
+											<Component />
+										</Layout>
+									</Middleware>
+								) : (
+									<Layout>
+										<Component />
+									</Layout>
+								)
 							}
 						/>
 					)

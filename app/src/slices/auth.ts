@@ -9,7 +9,7 @@ import type { RootState } from "../store/store";
 
 interface AuthState {
 	token: string | null;
-	Establishment: AuthResponse | null;
+	user: AuthResponse | null;
 	isAuthenticated: boolean;
 	isLoading: boolean;
 }
@@ -45,7 +45,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
 // Estado inicial limpo, sem localStorage
 const initialState: AuthState = {
 	token: null,
-	Establishment: null,
+	user: null,
 	isAuthenticated: false,
 	isLoading: false,
 };
@@ -57,14 +57,14 @@ const authSlice = createSlice({
 		setCredentials: (state, action: PayloadAction<AuthResponse>) => {
 			const token = action.payload.response.token;
 			state.token = token;
-			state.Establishment = action.payload;
+			state.user = action.payload;
 			state.isAuthenticated = true;
 
 			localStorage.setItem("@userToken", token);
 		},
 		logout: (state) => {
 			state.token = null;
-			state.Establishment = null;
+			state.user = null;
 			state.isAuthenticated = false;
 
 			localStorage.removeItem("@userToken");
@@ -78,7 +78,7 @@ const authSlice = createSlice({
 export default authSlice.reducer;
 
 // Selectors
-export const setListUser = (state: RootState) => state.auth.Establishment;
+export const setListUser = (state: RootState) => state.auth.user;
 export const selectToken = (state: RootState) => state.auth.token;
 export const selectIsAuthenticated = (state: RootState) =>
 	state.auth.isAuthenticated;

@@ -20,7 +20,7 @@ export async function loginHandle(req: Request, res: Response) {
 
 		const response = {
 			token: token,
-			userId: user,
+			user: user,
 		};
 
 		res.status(200).json({ response });

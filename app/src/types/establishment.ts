@@ -148,7 +148,7 @@ export interface EstablishmentRegister {
 }
 
 export interface AuthResponse {
-	response: { token: string; establishment: Establishment };
+	response: { token: string; user: Establishment };
 }
 
 export interface Login {
