@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
-import { Establishment } from "../models/Establishment";
+import { User } from "../models/User";
 
 const privateKey = process.env.PRIVATEKEY!;
 if (!privateKey) throw new Error("chave JWT não definida em PRIVATEKEY");
@@ -18,11 +18,11 @@ export const ensureAuth = (
 	const token = authHeader?.split(" ")[1];
 	try {
 		const decoded = jwt.verify(token!, privateKey) as JwtPayload;
-		if (!decoded?.establishment) {
+		if (!decoded?.userId) {
 			res.status(401).json({ message: "Token inválido" });
 		}
 
-		res.locals.establishmentId = String(decoded.establishment);
+		res.locals.userId = String(decoded.userId);
 
 		next();
 	} catch (error) {
@@ -36,14 +36,14 @@ export const verifyIdEstablishment = (
 	res: Response,
 	next: NextFunction
 ): void => {
-	const establishmentId = req.body.establishmentId;
-	if (!establishmentId) {
+	const userId = req.body.userId;
+	if (!userId) {
 		res.status(401).json({ message: "id do estabelecimento não enviado" });
 	}
 	try {
-		const establishment = Establishment.findById({ establishmentId });
+		const user = User.findById({ userId });
 
-		if (!establishment) {
+		if (!user) {
 			res.status(400).json({ message: "Estabelecimento não encontrado" });
 		}
 

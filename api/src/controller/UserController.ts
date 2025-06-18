@@ -1,23 +1,21 @@
 import { Request, Response } from "express";
-import { Establishment } from "../models/Establishment";
-import { setScheduleService } from "../service/establishmentService";
+import { User } from "../models/User";
+import { setScheduleService } from "../service/UserService";
 
-export async function findEstablishment(req: Request, res: Response) {
+export async function findUser(req: Request, res: Response) {
 	try {
-		const establishmentId = res.locals.establishmentId as string;
-		if (!establishmentId) {
+		const userId = res.locals.userId;
+		if (!userId) {
 			res.status(401).json({ message: "Não autenticado" });
 		}
 
-		const establishment = await Establishment.findById(establishmentId).select(
-			"-password"
-		);
+		const user = await User.findById(userId).select("-password");
 
-		if (!establishment) {
+		if (!user) {
 			res.status(404).json({ message: "Estabelecimento Não encontrado" });
 		}
 
-		res.json(establishment);
+		res.json(user);
 	} catch (error) {
 		console.log("Erro ao buscar usuário", error);
 		res.status(500).json({ message: "Error interno no servidor" });
@@ -26,10 +24,10 @@ export async function findEstablishment(req: Request, res: Response) {
 
 export async function setSchedule(req: Request, res: Response) {
 	try {
-		const establishmentId = res.locals.establishmentId as string;
+		const userId = res.locals.userId as string;
 		const schedule = req.body.schedule;
 
-		const updated = await setScheduleService(establishmentId, schedule);
+		const updated = await setScheduleService(userId, schedule);
 
 		res.json(updated);
 	} catch (error) {
@@ -40,15 +38,15 @@ export async function setSchedule(req: Request, res: Response) {
 
 export async function updateBasicInfo(req: Request, res: Response) {
 	try {
-		const establishmentId = res.locals.establishmentId as string;
-		if (!establishmentId) {
+		const userId = res.locals.userId as string;
+		if (!userId) {
 			res.status(401).json({ message: "Não autenticado" });
 		}
 
 		const { name, description, category, website, whatsapp } = req.body;
 
-		const establishment = await Establishment.findByIdAndUpdate(
-			establishmentId,
+		const user = await User.findByIdAndUpdate(
+			userId,
 			{
 				name,
 				description,
@@ -60,11 +58,11 @@ export async function updateBasicInfo(req: Request, res: Response) {
 			{ new: true, runValidators: true }
 		).select("-password");
 
-		if (!establishment) {
+		if (!user) {
 			res.status(404).json({ message: "Estabelecimento não encontrado" });
 		}
 
-		res.json(establishment);
+		res.json(user);
 	} catch (error) {
 		console.log("Erro ao atualizar informações básicas", error);
 		res.status(500).json({ message: "Erro interno do servidor" });
@@ -73,8 +71,8 @@ export async function updateBasicInfo(req: Request, res: Response) {
 
 export async function updateAddress(req: Request, res: Response) {
 	try {
-		const establishmentId = res.locals.establishmentId as string;
-		if (!establishmentId) {
+		const userId = res.locals.userId as string;
+		if (!userId) {
 			res.status(401).json({ message: "Não autenticado" });
 		}
 
@@ -89,8 +87,8 @@ export async function updateAddress(req: Request, res: Response) {
 			coordinates,
 		} = req.body;
 
-		const establishment = await Establishment.findByIdAndUpdate(
-			establishmentId,
+		const user = await User.findByIdAndUpdate(
+			userId,
 			{
 				"address.street": street,
 				"address.number": number,
@@ -105,11 +103,11 @@ export async function updateAddress(req: Request, res: Response) {
 			{ new: true, runValidators: true }
 		).select("-password");
 
-		if (!establishment) {
+		if (!user) {
 			res.status(404).json({ message: "Estabelecimento não encontrado" });
 		}
 
-		res.json(establishment);
+		res.json(user);
 	} catch (error) {
 		console.log("Erro ao atualizar endereço", error);
 		res.status(500).json({ message: "Erro interno do servidor" });
@@ -118,15 +116,15 @@ export async function updateAddress(req: Request, res: Response) {
 
 export async function updateBusinessInfo(req: Request, res: Response) {
 	try {
-		const establishmentId = res.locals.establishmentId as string;
-		if (!establishmentId) {
+		const userId = res.locals.userId as string;
+		if (!userId) {
 			res.status(401).json({ message: "Não autenticado" });
 		}
 
 		const { cnpj, cpf, businessName } = req.body;
 
-		const establishment = await Establishment.findByIdAndUpdate(
-			establishmentId,
+		const user = await User.findByIdAndUpdate(
+			userId,
 			{
 				cnpj,
 				cpf,
@@ -136,11 +134,11 @@ export async function updateBusinessInfo(req: Request, res: Response) {
 			{ new: true, runValidators: true }
 		).select("-password");
 
-		if (!establishment) {
+		if (!user) {
 			res.status(404).json({ message: "Estabelecimento não encontrado" });
 		}
 
-		res.json(establishment);
+		res.json(user);
 	} catch (error) {
 		console.log("Erro ao atualizar informações comerciais", error);
 		res.status(500).json({ message: "Erro interno do servidor" });
@@ -149,8 +147,8 @@ export async function updateBusinessInfo(req: Request, res: Response) {
 
 export async function updateDeliverySettings(req: Request, res: Response) {
 	try {
-		const establishmentId = res.locals.establishmentId as string;
-		if (!establishmentId) {
+		const userId = res.locals.userId as string;
+		if (!userId) {
 			res.status(401).json({ message: "Não autenticado" });
 		}
 
@@ -162,8 +160,8 @@ export async function updateDeliverySettings(req: Request, res: Response) {
 			estimatedTime,
 		} = req.body;
 
-		const establishment = await Establishment.findByIdAndUpdate(
-			establishmentId,
+		const user = await User.findByIdAndUpdate(
+			userId,
 			{
 				"deliverySettings.hasDelivery": hasDelivery,
 				"deliverySettings.deliveryFee": deliveryFee,
@@ -175,11 +173,11 @@ export async function updateDeliverySettings(req: Request, res: Response) {
 			{ new: true, runValidators: true }
 		).select("-password");
 
-		if (!establishment) {
+		if (!user) {
 			res.status(404).json({ message: "Estabelecimento não encontrado" });
 		}
 
-		res.json(establishment);
+		res.json(user);
 	} catch (error) {
 		console.log("Erro ao atualizar configurações de delivery", error);
 		res.status(500).json({ message: "Erro interno do servidor" });
@@ -188,15 +186,15 @@ export async function updateDeliverySettings(req: Request, res: Response) {
 
 export async function updateSocialMedia(req: Request, res: Response) {
 	try {
-		const establishmentId = res.locals.establishmentId as string;
-		if (!establishmentId) {
+		const userId = res.locals.userId as string;
+		if (!userId) {
 			res.status(401).json({ message: "Não autenticado" });
 		}
 
 		const { instagram, facebook, twitter } = req.body;
 
-		const establishment = await Establishment.findByIdAndUpdate(
-			establishmentId,
+		const user = await User.findByIdAndUpdate(
+			userId,
 			{
 				"socialMedia.instagram": instagram,
 				"socialMedia.facebook": facebook,
@@ -206,11 +204,11 @@ export async function updateSocialMedia(req: Request, res: Response) {
 			{ new: true, runValidators: true }
 		).select("-password");
 
-		if (!establishment) {
+		if (!user) {
 			res.status(404).json({ message: "Estabelecimento não encontrado" });
 		}
 
-		res.json(establishment);
+		res.json(user);
 	} catch (error) {
 		console.log("Erro ao atualizar redes sociais", error);
 		res.status(500).json({ message: "Erro interno do servidor" });
@@ -219,15 +217,15 @@ export async function updateSocialMedia(req: Request, res: Response) {
 
 export async function updateMedia(req: Request, res: Response) {
 	try {
-		const establishmentId = res.locals.establishmentId as string;
-		if (!establishmentId) {
+		const userId = res.locals.userId as string;
+		if (!userId) {
 			res.status(401).json({ message: "Não autenticado" });
 		}
 
 		const { logo, coverImage, photos } = req.body;
 
-		const establishment = await Establishment.findByIdAndUpdate(
-			establishmentId,
+		const user = await User.findByIdAndUpdate(
+			userId,
 			{
 				logo,
 				coverImage,
@@ -237,11 +235,11 @@ export async function updateMedia(req: Request, res: Response) {
 			{ new: true, runValidators: true }
 		).select("-password");
 
-		if (!establishment) {
+		if (!user) {
 			res.status(404).json({ message: "Estabelecimento não encontrado" });
 		}
 
-		res.json(establishment);
+		res.json(user);
 	} catch (error) {
 		console.log("Erro ao atualizar mídia", error);
 		res.status(500).json({ message: "Erro interno do servidor" });
@@ -250,15 +248,15 @@ export async function updateMedia(req: Request, res: Response) {
 
 export async function updateBillingInfo(req: Request, res: Response) {
 	try {
-		const establishmentId = res.locals.establishmentId as string;
-		if (!establishmentId) {
+		const userId = res.locals.userId as string;
+		if (!userId) {
 			res.status(401).json({ message: "Não autenticado" });
 		}
 
 		const { cardLastFour, cardBrand, holderName, billingAddress } = req.body;
 
-		const establishment = await Establishment.findByIdAndUpdate(
-			establishmentId,
+		const user = await User.findByIdAndUpdate(
+			userId,
 			{
 				"billingInfo.cardLastFour": cardLastFour,
 				"billingInfo.cardBrand": cardBrand,
@@ -269,11 +267,11 @@ export async function updateBillingInfo(req: Request, res: Response) {
 			{ new: true, runValidators: true }
 		).select("-password");
 
-		if (!establishment) {
+		if (!user) {
 			res.status(404).json({ message: "Estabelecimento não encontrado" });
 		}
 
-		res.json(establishment);
+		res.json(user);
 	} catch (error) {
 		console.log("Erro ao atualizar informações de cobrança", error);
 		res.status(500).json({ message: "Erro interno do servidor" });
@@ -282,8 +280,8 @@ export async function updateBillingInfo(req: Request, res: Response) {
 
 export async function updateSubscription(req: Request, res: Response) {
 	try {
-		const establishmentId = res.locals.establishmentId as string;
-		if (!establishmentId) {
+		const userId = res.locals.userId as string;
+		if (!userId) {
 			res.status(401).json({ message: "Não autenticado" });
 		}
 
@@ -299,8 +297,8 @@ export async function updateSubscription(req: Request, res: Response) {
 			autoRenewal,
 		} = req.body;
 
-		const establishment = await Establishment.findByIdAndUpdate(
-			establishmentId,
+		const user = await User.findByIdAndUpdate(
+			userId,
 			{
 				"subscription.planId": planId,
 				"subscription.planName": planName,
@@ -316,11 +314,11 @@ export async function updateSubscription(req: Request, res: Response) {
 			{ new: true, runValidators: true }
 		).select("-password");
 
-		if (!establishment) {
+		if (!user) {
 			res.status(404).json({ message: "Estabelecimento não encontrado" });
 		}
 
-		res.json(establishment);
+		res.json(user);
 	} catch (error) {
 		console.log("Erro ao atualizar assinatura", error);
 		res.status(500).json({ message: "Erro interno do servidor" });
@@ -329,8 +327,8 @@ export async function updateSubscription(req: Request, res: Response) {
 
 export async function updateFeatures(req: Request, res: Response) {
 	try {
-		const establishmentId = res.locals.establishmentId as string;
-		if (!establishmentId) {
+		const userId = res.locals.userId as string;
+		if (!userId) {
 			res.status(401).json({ message: "Não autenticado" });
 		}
 
@@ -342,8 +340,8 @@ export async function updateFeatures(req: Request, res: Response) {
 			canCustomizeTheme,
 		} = req.body;
 
-		const establishment = await Establishment.findByIdAndUpdate(
-			establishmentId,
+		const user = await User.findByIdAndUpdate(
+			userId,
 			{
 				"features.maxProducts": maxProducts,
 				"features.maxPhotos": maxPhotos,
@@ -355,11 +353,11 @@ export async function updateFeatures(req: Request, res: Response) {
 			{ new: true, runValidators: true }
 		).select("-password");
 
-		if (!establishment) {
+		if (!user) {
 			res.status(404).json({ message: "Estabelecimento não encontrado" });
 		}
 
-		res.json(establishment);
+		res.json(user);
 	} catch (error) {
 		console.log("Erro ao atualizar recursos", error);
 		res.status(500).json({ message: "Erro interno do servidor" });
@@ -368,15 +366,15 @@ export async function updateFeatures(req: Request, res: Response) {
 
 export async function updateStatus(req: Request, res: Response) {
 	try {
-		const establishmentId = res.locals.establishmentId as string;
-		if (!establishmentId) {
+		const userId = res.locals.userId as string;
+		if (!userId) {
 			res.status(401).json({ message: "Não autenticado" });
 		}
 
 		const { status, isApproved } = req.body;
 
-		const establishment = await Establishment.findByIdAndUpdate(
-			establishmentId,
+		const user = await User.findByIdAndUpdate(
+			userId,
 			{
 				status,
 				isApproved,
@@ -385,11 +383,11 @@ export async function updateStatus(req: Request, res: Response) {
 			{ new: true, runValidators: true }
 		).select("-password");
 
-		if (!establishment) {
+		if (!user) {
 			res.status(404).json({ message: "Estabelecimento não encontrado" });
 		}
 
-		res.json(establishment);
+		res.json(user);
 	} catch (error) {
 		console.log("Erro ao atualizar status", error);
 		res.status(500).json({ message: "Erro interno do servidor" });
@@ -398,13 +396,13 @@ export async function updateStatus(req: Request, res: Response) {
 
 export async function updateLastLogin(req: Request, res: Response) {
 	try {
-		const establishmentId = res.locals.establishmentId as string;
-		if (!establishmentId) {
+		const userId = res.locals.userId as string;
+		if (!userId) {
 			res.status(401).json({ message: "Não autenticado" });
 		}
 
-		const establishment = await Establishment.findByIdAndUpdate(
-			establishmentId,
+		const user = await User.findByIdAndUpdate(
+			userId,
 			{
 				lastLogin: new Date(),
 				updatedAt: new Date(),
@@ -412,7 +410,7 @@ export async function updateLastLogin(req: Request, res: Response) {
 			{ new: true, runValidators: true }
 		).select("-password");
 
-		if (!establishment) {
+		if (!user) {
 			res.status(404).json({ message: "Estabelecimento não encontrado" });
 		}
 

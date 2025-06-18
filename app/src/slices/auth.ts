@@ -5,6 +5,7 @@ import {
 	type Login,
 } from "../types/establishment";
 import { apiSlice } from "./api";
+import type { RootState } from "../store/store";
 
 interface AuthState {
 	token: string | null;
@@ -41,27 +42,11 @@ export const authApiSlice = apiSlice.injectEndpoints({
 	}),
 });
 
-const loadTokenFromStorage = (): string | null => {
-	try {
-		return localStorage.getItem("@EstablishmentToken");
-	} catch {
-		return null;
-	}
-};
-
-const loadUserFromStorage = (): AuthResponse | null => {
-	try {
-		const auth = localStorage.getItem("@EstablishmentToken");
-		return auth ? JSON.parse(auth) : null;
-	} catch {
-		return null;
-	}
-};
-
+// Estado inicial limpo, sem localStorage
 const initialState: AuthState = {
-	token: loadTokenFromStorage(),
-	Establishment: loadUserFromStorage(),
-	isAuthenticated: !!loadTokenFromStorage(),
+	token: null,
+	Establishment: null,
+	isAuthenticated: false,
 	isLoading: false,
 };
 
@@ -70,20 +55,19 @@ const authSlice = createSlice({
 	initialState,
 	reducers: {
 		setCredentials: (state, action: PayloadAction<AuthResponse>) => {
-			const { token } = action.payload;
+			const token = action.payload.response.token;
 			state.token = token;
 			state.Establishment = action.payload;
 			state.isAuthenticated = true;
 
-			localStorage.setItem("@EstablishmentToken", token);
+			localStorage.setItem("@userToken", token);
 		},
 		logout: (state) => {
 			state.token = null;
 			state.Establishment = null;
 			state.isAuthenticated = false;
 
-			// Remover do localStorage
-			localStorage.removeItem("@EstablishmentToken");
+			localStorage.removeItem("@userToken");
 		},
 		setLoading: (state, action: PayloadAction<boolean>) => {
 			state.isLoading = action.payload;
@@ -92,6 +76,14 @@ const authSlice = createSlice({
 });
 
 export default authSlice.reducer;
+
+// Selectors
+export const setListUser = (state: RootState) => state.auth.Establishment;
+export const selectToken = (state: RootState) => state.auth.token;
+export const selectIsAuthenticated = (state: RootState) =>
+	state.auth.isAuthenticated;
+export const selectIsLoading = (state: RootState) => state.auth.isLoading;
+
 export const { logout, setCredentials, setLoading } = authSlice.actions;
 
 export const { useLoginMutation, useLogoutMutation, useRegisterMutation } =

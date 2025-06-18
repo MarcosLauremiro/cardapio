@@ -12,10 +12,10 @@ export const Category = model(
 			type: String,
 			required: true,
 		},
-		establishment: {
+		userId: {
 			type: Schema.Types.ObjectId,
 			required: true,
-			reg: "Establishment",
+			reg: "User",
 		},
 		isActive: {
 			type: Boolean,

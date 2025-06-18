@@ -57,7 +57,7 @@ export const routerOrders = Router();
  *                           type: string
  *                         quantity:
  *                           type: number
- *                   establishment:
+ *                   user:
  *                     type: string
  *                   customerName:
  *                     type: string
@@ -134,7 +134,7 @@ routerOrders.get("/", ensureAuth, listOrder);
  *             type: object
  *             required:
  *               - products
- *               - establishment
+ *               - userId
  *               - customerName
  *             properties:
  *               table:
@@ -152,7 +152,7 @@ routerOrders.get("/", ensureAuth, listOrder);
  *                     quantity:
  *                       type: number
  *                       default: 1
- *               establishment:
+ *               userId:
  *                 type: string
  *                 description: ID do estabelecimento
  *               customerName:
@@ -232,7 +232,7 @@ routerOrders.get("/", ensureAuth, listOrder);
  *                         type: string
  *                       quantity:
  *                         type: number
- *                 establishmentId:
+ *                 userId:
  *                   type: string
  *                 customerName:
  *                   type: string

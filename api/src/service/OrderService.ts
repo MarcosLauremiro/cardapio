@@ -1,5 +1,5 @@
 import { HttpError } from "../middleware/HttpError";
-import { Establishment } from "../models/Establishment";
+import { User } from "../models/User";
 import { Order } from "../models/Order";
 import { Product } from "../models/Product";
 import { CreateOrderDTO } from "../types/express/types";
@@ -9,7 +9,7 @@ export async function createOrderService(dto: CreateOrderDTO) {
 		customerName,
 		table,
 		products,
-		establishmentId,
+		userId,
 		delivery,
 		payment,
 		customerPhone,
@@ -52,16 +52,14 @@ export async function createOrderService(dto: CreateOrderDTO) {
 		}
 	}
 
-	const establishment = await Establishment.findById(establishmentId).lean();
+	const user = await User.findById(userId).lean();
 
-	if (!establishment) {
+	if (!user) {
 		throw new HttpError(400, "Estabelecimento não encontrado.");
 	}
 
 	const now = new Date();
-	const todaySlot = establishment.schedule.find(
-		(s) => s.diaSemana === now.getDay()
-	);
+	const todaySlot = user.schedule.find((s) => s.diaSemana === now.getDay());
 
 	if (!todaySlot || todaySlot.fechado) {
 		throw new HttpError(
@@ -112,7 +110,7 @@ export async function createOrderService(dto: CreateOrderDTO) {
 		customerPhone,
 		table: delivery?.isDelivery ? undefined : table,
 		products: itemsToSave,
-		establishment: establishmentId,
+		userId: userId,
 		delivery: delivery?.isDelivery ? delivery : { isDelivery: false },
 		payment: payment || {},
 	});

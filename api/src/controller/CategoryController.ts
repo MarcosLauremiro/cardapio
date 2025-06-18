@@ -16,14 +16,14 @@ export async function listCategories(req: Request, res: Response) {
 
 export async function CreateCategory(req: Request, res: Response) {
 	try {
-		const establishmentId = res.locals.establishmentId as string;
+		const userId = res.locals.userId as string;
 
 		const { icon, name, isActive } = req.body;
 
 		const category = await createCategoryService({
 			name,
 			icon,
-			establishmentId,
+			userId,
 			isActive,
 		});
 
@@ -49,12 +49,12 @@ export async function listProductsByCategory(req: Request, res: Response) {
 
 export async function updateCategory(req: Request, res: Response) {
 	try {
-		const establishmentId = res.locals.establishmentId as string;
+		const userId = res.locals.userId;
 		const { categoryId } = req.params;
 		const updates = req.body;
 
 		const category = await Category.findOneAndUpdate(
-			{ _id: categoryId, establishment: establishmentId },
+			{ _id: categoryId, userId: userId },
 			updates,
 			{ new: true, runValidators: true }
 		);
@@ -75,11 +75,11 @@ export async function updateCategory(req: Request, res: Response) {
 
 export async function deleteCategory(req: Request, res: Response) {
 	try {
-		const establishmentId = res.locals.establishmentId as string;
+		const userId = res.locals.userId;
 		const { categoryId } = req.params;
 		await Category.findOneAndDelete({
 			_id: categoryId,
-			establishment: establishmentId,
+			userId: userId,
 		});
 
 		res.status(200).json({ message: "Categoria deletada com sucesso" });

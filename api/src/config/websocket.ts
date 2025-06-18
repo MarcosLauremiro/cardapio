@@ -4,7 +4,7 @@ import { verify } from "jsonwebtoken";
 
 declare module "ws" {
 	interface WebSocket {
-		establishmentId?: string;
+		userId?: string;
 	}
 }
 
@@ -25,27 +25,27 @@ export const setupWebSocket = (httpServer: Server): WebSocketServer => {
 
 		try {
 			const decoded = verify(token, process.env.PRIVATEKEY!) as {
-				establishment: string;
+				userId: string;
 			};
-			const establishmentId = String(decoded.establishment);
+			const userId = String(decoded.userId);
 
-			if (!wsClients.has(establishmentId)) {
-				wsClients.set(establishmentId, new Set());
+			if (!wsClients.has(userId)) {
+				wsClients.set(userId, new Set());
 			}
-			wsClients.get(establishmentId)!.add(ws);
-			ws.establishmentId = establishmentId;
+			wsClients.get(userId)!.add(ws);
+			ws.userId = userId;
 
-			console.log(`WS conectado para establishmentId=${establishmentId}`);
+			console.log(`WS conectado para userId=${userId}`);
 
 			ws.on("close", () => {
-				const setOfSockets = wsClients.get(establishmentId);
+				const setOfSockets = wsClients.get(userId);
 				if (setOfSockets) {
 					setOfSockets.delete(ws);
 					if (setOfSockets.size === 0) {
-						wsClients.delete(establishmentId);
+						wsClients.delete(userId);
 					}
 				}
-				console.log(`WS desconectado para establishmentId=${establishmentId}`);
+				console.log(`WS desconectado para userId=${userId}`);
 			});
 		} catch (error) {
 			ws.close(4002, `Token inválido error: ${error}`);

@@ -12,6 +12,26 @@ import { PricingPlans } from "../pages/plan";
 import { ForgotPassword } from "../pages/forgot";
 
 export const RoutesMain = () => {
+	// type UserStatus =
+	// 	| "pending"
+	// 	| "active"
+	// 	| "inactive"
+	// 	| "suspended"
+	// 	| "canceled"
+	// 	| undefined;
+	// const { data, isLoading, isError } = useGetUserQuery();
+
+	// const middlewarePlan = () => {
+	// 	const status = data?.status as UserStatus;
+	// 	if (
+	// 		status === "inactive" ||
+	// 		status === "suspended" ||
+	// 		status === "canceled"
+	// 	) {
+	// 		return <Navigate to="/plan" replace />;
+	// 	}
+	// };
+
 	const routesWithLayout = [
 		{ path: "/home", component: Home, protected: true },
 		{ path: "/accout", component: Account, protected: true },
@@ -23,7 +43,7 @@ export const RoutesMain = () => {
 	const routesWithoutLayout = [
 		{ path: "/login", component: Login, protected: false },
 		{ path: "/register", component: Register, protected: false },
-		{ path: "/plan", component: PricingPlans, protected: false },
+		{ path: "/plan", component: PricingPlans, protected: true },
 		{ path: "/forgot-password", component: ForgotPassword, protected: false },
 	];
 

@@ -5,7 +5,7 @@ export interface ProductDto {
 	price: number;
 	ingredients: Ingredients[];
 	category: string;
-	establishment: string;
+	userID: string;
 	active?: boolean;
 }
 
@@ -25,7 +25,7 @@ interface Address {
 }
 
 export interface CreateOrderDTO {
-	establishmentId: string;
+	userId: string;
 	table: string;
 	products: { product: string; quantity: number }[];
 	customerName: string;
@@ -57,5 +57,5 @@ export interface CreateCategoryDto {
 	name: string;
 	icon: string;
 	isActive: boolean;
-	establishmentId: string;
+	userId: string;
 }

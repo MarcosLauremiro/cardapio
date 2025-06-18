@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 interface Plan {
 	id: string;
@@ -25,11 +25,6 @@ interface SubscriptionFormData {
 export const PricingPlans = () => {
 	const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null);
 	const [isModalOpen, setIsModalOpen] = useState(false);
-	const [timeLeft, setTimeLeft] = useState({
-		hours: 23,
-		minutes: 45,
-		seconds: 12,
-	});
 	const [formData, setFormData] = useState<SubscriptionFormData>({
 		name: "",
 		email: "",
@@ -41,23 +36,8 @@ export const PricingPlans = () => {
 	});
 	const [isLoading, setIsLoading] = useState(false);
 
-	// Countdown timer
-	useEffect(() => {
-		const timer = setInterval(() => {
-			setTimeLeft((prev) => {
-				if (prev.seconds > 0) {
-					return { ...prev, seconds: prev.seconds - 1 };
-				} else if (prev.minutes > 0) {
-					return { ...prev, minutes: prev.minutes - 1, seconds: 59 };
-				} else if (prev.hours > 0) {
-					return { hours: prev.hours - 1, minutes: 59, seconds: 59 };
-				}
-				return prev;
-			});
-		}, 1000);
-
-		return () => clearInterval(timer);
-	}, []);
+	// const user = useGetUserQuery();
+	// console.log("requisição", user);
 
 	const plans: Plan[] = [
 		{
@@ -175,16 +155,6 @@ export const PricingPlans = () => {
 
 	return (
 		<>
-			<div className="flex items-center justify-center space-x-2 text-gray-50 bg-red-500">
-				<span>Ganhe 40% de desconto em todos os planos! Oferta expira em</span>
-				<div className="flex items-center space-x-1 font-mono font-bold h-12 text-gray-50">
-					<span>{timeLeft.hours.toString().padStart(2, "0")}h</span>
-					<span>:</span>
-					<span>{timeLeft.minutes.toString().padStart(2, "0")}m</span>
-					<span>:</span>
-					<span>{timeLeft.seconds.toString().padStart(2, "0")}s</span>
-				</div>
-			</div>
 			<div className="min-h-screen bg-gray-100 py-12 px-4">
 				<div className="max-w-6xl mx-auto">
 					{/* Header */}

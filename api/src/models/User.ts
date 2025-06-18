@@ -74,11 +74,10 @@ const SubscriptionSchema = new Schema(
 	{ _id: false }
 );
 
-export const Establishment = model(
-	"Establishment",
+export const User = model(
+	"User",
 	new Schema(
 		{
-			// Informações básicas
 			name: {
 				type: String,
 				required: true,
@@ -95,15 +94,6 @@ export const Establishment = model(
 			},
 			category: {
 				type: String,
-				enum: [
-					"restaurant",
-					"bar",
-					"cafe",
-					"fast_food",
-					"pizzeria",
-					"bakery",
-					"other",
-				],
 			},
 
 			// Horários de funcionamento

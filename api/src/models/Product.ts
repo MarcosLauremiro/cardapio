@@ -39,10 +39,10 @@ export const Product = model(
 			required: true,
 			reg: "Category",
 		},
-		establishment: {
+		userId: {
 			type: Schema.Types.ObjectId,
 			required: true,
-			reg: "Establishment",
+			reg: "User",
 		},
 		active: {
 			type: Boolean,

@@ -4,7 +4,7 @@ import { routerCategory } from "./routes/routesCategories";
 import { productRouter } from "./routes/routesProducts";
 import { routerOrders } from "./routes/routesOrders";
 import { authRoutes } from "./routes/routesAuth";
-import { establishmentRoutes } from "./routes/routesEstablishment";
+import { userRoutes } from "./routes/UserRoute";
 import { errorHandler } from "./middleware/ErrorHandle";
 import { setupSwagger } from "./utils/swagger";
 import { uploadRouter } from "./routes/RouterUpload";
@@ -20,7 +20,7 @@ export const createApp = (): express.Application => {
 	app.use("/categories", routerCategory);
 	app.use("/products", productRouter);
 	app.use("/orders", routerOrders);
-	app.use("/establishment", establishmentRoutes);
+	app.use("/establishment", userRoutes);
 	app.use("/auth", authRoutes);
 	app.use("/upload-image", uploadRouter);
 

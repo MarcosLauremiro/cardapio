@@ -38,10 +38,10 @@ export const Order = model(
 				},
 			],
 		},
-		establishment: {
+		userId: {
 			required: true,
 			type: Schema.Types.ObjectId,
-			ref: "Establishment",
+			ref: "User",
 		},
 		customerName: {
 			required: true,

@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { ensureAuth } from "../middleware/authMiddlewate";
 import {
-	findEstablishment,
+	findUser,
 	setSchedule,
 	updateBasicInfo,
 	updateAddress,
@@ -14,9 +14,9 @@ import {
 	updateFeatures,
 	updateStatus,
 	updateLastLogin,
-} from "../controller/EstablishmentController";
+} from "../controller/UserController";
 
-export const establishmentRoutes = Router();
+export const userRoutes = Router();
 
 /**
  * @swagger
@@ -171,7 +171,7 @@ export const establishmentRoutes = Router();
  *       500:
  *         description: Erro interno do servidor
  */
-establishmentRoutes.get("/", ensureAuth, findEstablishment);
+userRoutes.get("/", ensureAuth, findUser);
 
 /**
  * @swagger
@@ -202,7 +202,7 @@ establishmentRoutes.get("/", ensureAuth, findEstablishment);
  *       500:
  *         description: Erro interno ao atualizar horário
  */
-establishmentRoutes.put("/schedule", ensureAuth, setSchedule);
+userRoutes.put("/schedule", ensureAuth, setSchedule);
 
 /**
  * @swagger
@@ -248,7 +248,7 @@ establishmentRoutes.put("/schedule", ensureAuth, setSchedule);
  *       500:
  *         description: Erro interno do servidor
  */
-establishmentRoutes.put("/basic-info", ensureAuth, updateBasicInfo);
+userRoutes.put("/basic-info", ensureAuth, updateBasicInfo);
 
 /**
  * @swagger
@@ -276,7 +276,7 @@ establishmentRoutes.put("/basic-info", ensureAuth, updateBasicInfo);
  *       500:
  *         description: Erro interno do servidor
  */
-establishmentRoutes.put("/address", ensureAuth, updateAddress);
+userRoutes.put("/address", ensureAuth, updateAddress);
 
 /**
  * @swagger
@@ -314,7 +314,7 @@ establishmentRoutes.put("/address", ensureAuth, updateAddress);
  *       500:
  *         description: Erro interno do servidor
  */
-establishmentRoutes.put("/business-info", ensureAuth, updateBusinessInfo);
+userRoutes.put("/business-info", ensureAuth, updateBusinessInfo);
 
 /**
  * @swagger
@@ -342,11 +342,7 @@ establishmentRoutes.put("/business-info", ensureAuth, updateBusinessInfo);
  *       500:
  *         description: Erro interno do servidor
  */
-establishmentRoutes.put(
-	"/delivery-settings",
-	ensureAuth,
-	updateDeliverySettings
-);
+userRoutes.put("/delivery-settings", ensureAuth, updateDeliverySettings);
 
 /**
  * @swagger
@@ -384,7 +380,7 @@ establishmentRoutes.put(
  *       500:
  *         description: Erro interno do servidor
  */
-establishmentRoutes.put("/social-media", ensureAuth, updateSocialMedia);
+userRoutes.put("/social-media", ensureAuth, updateSocialMedia);
 
 /**
  * @swagger
@@ -433,7 +429,7 @@ establishmentRoutes.put("/social-media", ensureAuth, updateSocialMedia);
  *       500:
  *         description: Erro interno do servidor
  */
-establishmentRoutes.put("/media", ensureAuth, updateMedia);
+userRoutes.put("/media", ensureAuth, updateMedia);
 
 /**
  * @swagger
@@ -473,7 +469,7 @@ establishmentRoutes.put("/media", ensureAuth, updateMedia);
  *       500:
  *         description: Erro interno do servidor
  */
-establishmentRoutes.put("/billing-info", ensureAuth, updateBillingInfo);
+userRoutes.put("/billing-info", ensureAuth, updateBillingInfo);
 
 /**
  * @swagger
@@ -501,7 +497,7 @@ establishmentRoutes.put("/billing-info", ensureAuth, updateBillingInfo);
  *       500:
  *         description: Erro interno do servidor
  */
-establishmentRoutes.put("/subscription", ensureAuth, updateSubscription);
+userRoutes.put("/subscription", ensureAuth, updateSubscription);
 
 /**
  * @swagger
@@ -545,7 +541,7 @@ establishmentRoutes.put("/subscription", ensureAuth, updateSubscription);
  *       500:
  *         description: Erro interno do servidor
  */
-establishmentRoutes.put("/features", ensureAuth, updateFeatures);
+userRoutes.put("/features", ensureAuth, updateFeatures);
 
 /**
  * @swagger
@@ -581,7 +577,7 @@ establishmentRoutes.put("/features", ensureAuth, updateFeatures);
  *       500:
  *         description: Erro interno do servidor
  */
-establishmentRoutes.put("/status", ensureAuth, updateStatus);
+userRoutes.put("/status", ensureAuth, updateStatus);
 
 /**
  * @swagger
@@ -611,4 +607,4 @@ establishmentRoutes.put("/status", ensureAuth, updateStatus);
  *       500:
  *         description: Erro interno do servidor
  */
-establishmentRoutes.put("/last-login", ensureAuth, updateLastLogin);
+userRoutes.put("/last-login", ensureAuth, updateLastLogin);

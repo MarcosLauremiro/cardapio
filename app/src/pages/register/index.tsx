@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { setCredentials, useRegisterMutation } from "../../slices/auth";
 import { useAppDispatch } from "../../store/hooks";
+import { isValidatePhone } from "../../utils/validatePhone";
 
 interface EstablishmentRegister {
 	name: string;
@@ -29,6 +30,7 @@ export const Register = () => {
 
 	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
+
 		setFormData((prev) => ({
 			...prev,
 			[name]: value,
@@ -39,7 +41,10 @@ export const Register = () => {
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 
-		if (!isFormValid) return;
+		if (!isValidatePhone(formData.phone)) {
+			setErrors("Telefone inválido. Ex: (11) 91234-5678");
+			return;
+		}
 
 		try {
 			setErrors("");
@@ -226,7 +231,7 @@ export const Register = () => {
 								value={formData.password}
 								onChange={handleInputChange}
 								className="w-full px-4 py-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 placeholder-gray-400"
-								placeholder="Password"
+								placeholder="Senha"
 								required
 							/>
 						</div>
@@ -235,8 +240,6 @@ export const Register = () => {
 								{errors}
 							</div>
 						)}
-
-						{/* Botão Criar Conta */}
 						<button
 							type="submit"
 							disabled={disable}

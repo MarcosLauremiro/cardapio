@@ -71,7 +71,7 @@ export async function listProductsWithSkip(req: Request, res: Response) {
 
 export async function createProducts(req: Request, res: Response) {
 	try {
-		const establishmentId = res.locals.establishmentId as string;
+		const userId = res.locals.userId
 		const imageUrl = req.file?.path;
 		const { name, description, price, category, ingredients } = req.body;
 		const product = await Product.create({
@@ -81,7 +81,7 @@ export async function createProducts(req: Request, res: Response) {
 			imagePath: imageUrl,
 			category,
 			ingredients: ingredients ? JSON.parse(ingredients) : [],
-			establishment: establishmentId,
+			userId: userId,
 		});
 		res.status(201).json(product);
 	} catch (error) {

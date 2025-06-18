@@ -4,12 +4,12 @@ const baseUrl = import.meta.env.VITE_REACT_API_URL;
 
 export const apiSlice = createApi({
 	reducerPath: "api",
-	tagTypes: ["Categories", "Products", "Auth"],
+	tagTypes: ["Categories", "Products", "Auth", "User"],
 	endpoints: () => ({}),
 	baseQuery: fetchBaseQuery({
 		baseUrl,
 		prepareHeaders: (headers) => {
-			const token = localStorage.getItem("token");
+			const token = localStorage.getItem("@userToken");
 			if (token) {
 				headers.set("Authorization", `Bearer ${token}`);
 			}

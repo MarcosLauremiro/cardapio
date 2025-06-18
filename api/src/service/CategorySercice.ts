@@ -3,7 +3,7 @@ import { Category } from "../models/Category";
 import { CreateCategoryDto } from "../types/express/types";
 
 export const createCategoryService = async (dto: CreateCategoryDto) => {
-	const { name, icon, establishmentId, isActive = true } = dto;
+	const { name, icon, userId, isActive = true } = dto;
 
 	const nameExists = await Category.findOne({ name: name });
 
@@ -14,7 +14,7 @@ export const createCategoryService = async (dto: CreateCategoryDto) => {
 	const category = await Category.create({
 		icon,
 		name,
-		establishment: establishmentId,
+		userId: userId,
 		isActive,
 	});
 

@@ -1,9 +1,9 @@
 import { HttpError } from "../middleware/HttpError";
-import { Establishment } from "../models/Establishment";
+import { User } from "../models/User";
 import { DaySchedule } from "../types/express/types";
 
 export async function setScheduleService(
-	establishmentId: string,
+	userId: string,
 	schedule: DaySchedule[]
 ) {
 	if (!Array.isArray(schedule) || schedule.length === 0) {
@@ -35,13 +35,13 @@ export async function setScheduleService(
 		}
 	}
 
-	const establishment = await Establishment.findById(establishmentId);
-	if (!establishment) {
+	const user = await User.findById(userId);
+	if (!user) {
 		throw new HttpError(404, "Estabelecimento não encontrado.");
 	}
 
-	const updated = await Establishment.findByIdAndUpdate(
-		establishmentId,
+	const updated = await User.findByIdAndUpdate(
+		userId,
 		{ schedule },
 		{ new: true, runValidators: true }
 	).lean();

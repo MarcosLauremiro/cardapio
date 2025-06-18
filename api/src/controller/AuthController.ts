@@ -1,26 +1,26 @@
 import { Request, Response } from "express";
 import { generateToken } from "../service/authService";
-import { Establishment } from "../models/Establishment";
+import { User } from "../models/User";
 import bcrypt from "bcryptjs";
 
 export async function loginHandle(req: Request, res: Response) {
 	const { email, password } = req.body;
 	try {
-		const establishment = await Establishment.findOne({ email });
-		if (!establishment) {
+		const user = await User.findOne({ email });
+		if (!user) {
 			res.status(401).json({ message: "Credenciais inválidas" });
 			return;
 		}
 
-		const match = await bcrypt.compare(password, establishment.password);
+		const match = await bcrypt.compare(password, user.password);
 		if (!match) {
 			res.status(401).json({ message: "Credenciais inválidas" });
 		}
-		const token = generateToken({ establishment: establishment._id });
+		const token = generateToken({ userId: user._id });
 
 		const response = {
 			token: token,
-			establishment: establishment,
+			userId: user,
 		};
 
 		res.status(200).json({ response });
@@ -40,7 +40,7 @@ export async function register(req: Request, res: Response) {
 			});
 		}
 
-		const exists = await Establishment.findOne({ email });
+		const exists = await User.findOne({ email });
 		if (exists) {
 			res.status(409).json({ message: "E-mail já cadastrado" });
 		}
@@ -60,11 +60,11 @@ export async function register(req: Request, res: Response) {
 		let uniqueSlug = slug;
 		const count = 1;
 
-		while (await Establishment.findOne({ slug: uniqueSlug })) {
+		while (await User.findOne({ slug: uniqueSlug })) {
 			uniqueSlug = `${slug}-${count}`;
 		}
 
-		const establishment = await Establishment.create({
+		const user = await User.create({
 			name: name.trim(),
 			phone: phone.trim(),
 			email: email.toLowerCase().trim(),
@@ -73,21 +73,21 @@ export async function register(req: Request, res: Response) {
 			password: hashed,
 		});
 
-		const token = generateToken({ userId: establishment._id });
+		const token = generateToken({ userId: user._id });
 
 		const establishmentResponse = {
-			_id: establishment._id,
-			name: establishment.name,
-			email: establishment.email,
-			phone: establishment.phone,
-			slug: establishment.slug,
-			status: establishment.status,
-			createdAt: establishment.createdAt,
+			_id: user._id,
+			name: user.name,
+			email: user.email,
+			phone: user.phone,
+			slug: user.slug,
+			status: user.status,
+			createdAt: user.createdAt,
 		};
 
 		res.status(201).json({
 			message: "Estabelecimento registrado com sucesso",
-			establishment: establishmentResponse,
+			user: establishmentResponse,
 			token,
 		});
 	} catch (error) {

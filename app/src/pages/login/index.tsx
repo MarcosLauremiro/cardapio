@@ -42,7 +42,7 @@ export const Login = () => {
 
 			const result = await login(formData).unwrap();
 			dispatch(setCredentials(result));
-			navigate("/home");
+			navigate("/plan");
 		} catch (error) {
 			console.error("Erro no login:", error);
 			setErrors("Credenciais inválidas");

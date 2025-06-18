@@ -10,8 +10,8 @@ export async function listOrder(req: Request, res: Response) {
 	try {
 		const page = Number(req.query.page) || 1;
 		const perPage = Number(req.query.perPage) || 20;
-		const establishmentId = res.locals.establishmentId;
-		const orders = await Order.find({ establishment: establishmentId })
+		const userId = res.locals.userId;
+		const orders = await Order.find({ userId: userId })
 			.skip((page - 1) * perPage)
 			.limit(perPage)
 			.sort({ createdAt: 1 })
@@ -27,7 +27,7 @@ export async function listOrder(req: Request, res: Response) {
 export async function createOrder(req: Request, res: Response) {
 	try {
 		const {
-			establishmentId,
+			userId,
 			table,
 			products,
 			customerName,
@@ -37,7 +37,7 @@ export async function createOrder(req: Request, res: Response) {
 		} = req.body;
 
 		const newOrderDoc = await createOrderService({
-			establishmentId,
+			userId,
 			table,
 			products,
 			customerName,
@@ -51,7 +51,7 @@ export async function createOrder(req: Request, res: Response) {
 			data: newOrderDoc,
 		};
 
-		const sockets = wsClients.get(establishmentId);
+		const sockets = wsClients.get(userId);
 		if (sockets) {
 			const message = JSON.stringify(payload);
 			for (const clientSocket of sockets) {
