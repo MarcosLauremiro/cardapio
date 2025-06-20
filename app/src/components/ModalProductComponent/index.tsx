@@ -1,6 +1,6 @@
 import type { Product } from "../../types/product.type";
 import { listCategories } from "../../slices/category";
-import { useState, type FormEvent, type ChangeEvent } from "react";
+import { useState, type FormEvent, type ChangeEvent, useCallback } from "react";
 import toast from "react-hot-toast";
 import {
 	useCreateProductMutation,
@@ -9,10 +9,12 @@ import {
 } from "../../slices/product";
 import { useAppSelector } from "../../store/hooks";
 import { FaRegTrashAlt, FaPlus, FaTimes } from "react-icons/fa";
+import type { Category } from "../../types/category.type";
 
 interface ProductModalProps {
 	editingProduct: Product | null;
 	setShowProductModalClose: () => void;
+	handleOpenCategoryModal: (category?: Category) => void;
 }
 
 export interface Ingredients {
@@ -28,11 +30,12 @@ type ProductFormState = Omit<Product, "imagePath"> & {
 export const ProductModal = ({
 	editingProduct,
 	setShowProductModalClose,
+	handleOpenCategoryModal,
 }: ProductModalProps) => {
 	const [product, setProduct] = useState<ProductFormState>({
 		name: editingProduct?.name || "",
 		description: editingProduct?.description || "",
-		price: editingProduct?.price || 0,
+		price: editingProduct?.price,
 		ingredients: editingProduct?.ingredients || [],
 		category: editingProduct?.category || "",
 		establishment: editingProduct?.establishment || "",
@@ -45,7 +48,6 @@ export const ProductModal = ({
 	);
 	const [submitting, setSubmitting] = useState(false);
 
-	// Estados para o formulário de ingredientes
 	const [newIngredient, setNewIngredient] = useState<Ingredients>({
 		name: "",
 		icon: "",
@@ -67,6 +69,9 @@ export const ProductModal = ({
 				setPreview(URL.createObjectURL(file));
 			}
 		} else {
+			if (name === "price" && value !== "" && !/^\d*\.?\d*$/.test(value)) {
+				return;
+			}
 			setProduct((prev) => ({
 				...prev,
 				[name]:
@@ -79,7 +84,6 @@ export const ProductModal = ({
 		}
 	};
 
-	// Função para adicionar ingrediente
 	const handleAddIngredient = () => {
 		if (!newIngredient.name.trim()) {
 			toast.error("Por favor, informe o nome do ingrediente");
@@ -96,11 +100,9 @@ export const ProductModal = ({
 			ingredients: [...(prev.ingredients || []), ingredient],
 		}));
 
-		// Limpar o formulário
 		setNewIngredient({ name: "", icon: "" });
 	};
 
-	// Função para remover ingrediente
 	const handleRemoveIngredient = (index: number) => {
 		setProduct((prev) => ({
 			...prev,
@@ -117,6 +119,10 @@ export const ProductModal = ({
 			[field]: e.target.value,
 		}));
 	};
+
+	const handleCreateCategory = useCallback(() => {
+		handleOpenCategoryModal();
+	}, [handleOpenCategoryModal]);
 
 	const handleDeleteProduct = async () => {
 		console.log("establi id", editingProduct);
@@ -181,7 +187,6 @@ export const ProductModal = ({
 					{editingProduct ? "Editar Produto" : "Novo Produto"}
 				</h2>
 				<form onSubmit={handleSubmit} className="space-y-4">
-					{/* Nome */}
 					<div>
 						<label className="block text-sm font-medium text-gray-700">
 							Nome
@@ -195,7 +200,6 @@ export const ProductModal = ({
 						/>
 					</div>
 
-					{/* Descrição */}
 					<div>
 						<label className="block text-sm font-medium text-gray-700">
 							Descrição
@@ -209,7 +213,6 @@ export const ProductModal = ({
 						/>
 					</div>
 
-					{/* Preço e Categoria */}
 					<div className="grid grid-cols-2 gap-4">
 						<div>
 							<label className="block text-sm font-medium text-gray-700">
@@ -220,8 +223,7 @@ export const ProductModal = ({
 								value={product.price}
 								onChange={handleChange}
 								type="number"
-								step="0.01"
-								min="0"
+								inputMode="decimal"
 								className="mt-1 block w-full px-3 py-2 border rounded-md focus:ring-green-500 focus:border-green-500"
 							/>
 						</div>
@@ -232,7 +234,13 @@ export const ProductModal = ({
 							<select
 								name="category"
 								value={product.category}
-								onChange={handleChange}
+								onChange={(e) => {
+									if (e.target.value === "create") {
+										handleCreateCategory();
+										return;
+									}
+									handleChange(e);
+								}}
 								className="mt-1 block w-full px-3 py-2 border rounded-md focus:ring-green-500 focus:border-green-500"
 							>
 								<option value="">Selecione</option>
@@ -241,17 +249,16 @@ export const ProductModal = ({
 										{cat.name}
 									</option>
 								))}
+								<option value="create">➕ Criar nova categoria</option>
 							</select>
 						</div>
 					</div>
 
-					{/* Ingredientes */}
 					<div>
 						<label className="block text-sm font-medium text-gray-700 mb-2">
 							Ingredientes
 						</label>
 
-						{/* Lista de ingredientes existentes */}
 						{product.ingredients && product.ingredients.length > 0 && (
 							<div className="mb-3">
 								<div className="flex flex-wrap gap-2">
@@ -275,7 +282,6 @@ export const ProductModal = ({
 							</div>
 						)}
 
-						{/* Formulário para adicionar novo ingrediente */}
 						<div className="border rounded-md p-3 bg-gray-50">
 							<div className="grid grid-cols-3 gap-2 mb-2">
 								<div className="col-span-2">
@@ -308,7 +314,6 @@ export const ProductModal = ({
 						</div>
 					</div>
 
-					{/* Imagem */}
 					<div>
 						<label className="block text-sm font-medium text-gray-700">
 							Imagem
@@ -334,7 +339,6 @@ export const ProductModal = ({
 						</div>
 					</div>
 
-					{/* Ativo */}
 					<div className="flex items-center">
 						<input
 							name="active"
@@ -348,7 +352,6 @@ export const ProductModal = ({
 						</label>
 					</div>
 
-					{/* Botões */}
 					<div className="flex justify-between">
 						{editingProduct ? (
 							<div className="flex justify-start gap-2 pt-4">

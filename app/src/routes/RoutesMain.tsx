@@ -2,8 +2,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import { Login } from "../pages/login";
 import { Register } from "../pages/register";
 import { Layout } from "../components/LayoutComponent";
-import { Home } from "../pages/home";
-import { Products } from "../pages/Product";
+import { Orders } from "../pages/orders";
 import { Account } from "../pages/account";
 import { History } from "../pages/history";
 import { Menu } from "../pages/menu";
@@ -58,7 +57,7 @@ const Middleware = ({ children }: MiddlewareProps) => {
 
 export const RoutesMain = () => {
 	const routesWithLayout = [
-		{ path: "/home", component: Home, protected: true, useMiddleware: true },
+		{ path: "/home", component: Orders, protected: true, useMiddleware: true },
 		{
 			path: "/account",
 			component: Account,
@@ -73,8 +72,8 @@ export const RoutesMain = () => {
 		},
 		{ path: "/menu", component: Menu, protected: true, useMiddleware: true },
 		{
-			path: "/products",
-			component: Products,
+			path: "/cardapio",
+			component: Menu,
 			protected: true,
 			useMiddleware: true,
 		},

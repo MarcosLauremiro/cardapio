@@ -36,7 +36,7 @@ export function CardCategory({ handleOpenCategoryModal }: CardCategoryProps) {
 					}`}
 					onClick={() => handleOpenCategoryModal(category)}
 				>
-					<h1>{category.name}</h1>
+					<h1 className="capitalize">{category.name}</h1>
 					<span>{category.icon}</span>
 					{!category.isActive && (
 						<span className="ml-1">

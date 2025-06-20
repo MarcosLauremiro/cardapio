@@ -3,33 +3,8 @@ import { Product } from "../models/Product";
 
 export async function listProducts(req: Request, res: Response) {
 	try {
-		// Parâmetros de paginação da query string
-		const page = parseInt(req.query.page as string) || 1;
-		const limit = parseInt(req.query.limit as string) || 10;
-		const skip = (page - 1) * limit;
-
-		// Buscar produtos com paginação
-		const products = await Product.find()
-			.skip(skip)
-			.limit(limit)
-			.sort({ createdAt: -1 }); // Ordenar pelos mais recentes
-
-		// Contar total de produtos para metadados
-		const totalProducts = await Product.countDocuments();
-		const totalPages = Math.ceil(totalProducts / limit);
-
-		// Resposta com metadados de paginação
-		res.json({
-			data: products,
-			pagination: {
-				currentPage: page,
-				totalPages,
-				totalItems: totalProducts,
-				itemsPerPage: limit,
-				hasNextPage: page < totalPages,
-				hasPrevPage: page > 1,
-			},
-		});
+		const products = await Product.find();
+		res.json(products);
 	} catch (error) {
 		console.log(error);
 		res.status(500).json({ error: "Erro interno do servidor" });
@@ -50,7 +25,8 @@ export async function listProductsWithSkip(req: Request, res: Response) {
 		const products = await Product.find()
 			.skip(skip)
 			.limit(limit)
-			.sort({ createdAt: -1 });
+			.sort({ createdAt: -1 })
+			.populate("category");
 
 		const totalProducts = await Product.countDocuments();
 
@@ -71,7 +47,7 @@ export async function listProductsWithSkip(req: Request, res: Response) {
 
 export async function createProducts(req: Request, res: Response) {
 	try {
-		const userId = res.locals.userId
+		const userId = res.locals.userId;
 		const imageUrl = req.file?.path;
 		const { name, description, price, category, ingredients } = req.body;
 		const product = await Product.create({

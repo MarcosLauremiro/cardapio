@@ -10,20 +10,6 @@ export interface Product {
 	active?: boolean;
 }
 
-export interface Pagination {
-	currentPage: number;
-	hasNextPage: boolean;
-	hasPrevPage: boolean;
-	itemsPerPage: number;
-	totalItems: number;
-	totalPages: number;
-}
-
-export interface Result {
-	data: Product[];
-	pagination: Pagination;
-}
-
 export interface Ingredients {
 	name: string;
 	icon: string;

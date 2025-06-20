@@ -2,6 +2,7 @@ import { useState } from "react";
 // import { useAppSelector } from "../../store/hooks";
 // import { setListUser } from "../../slices/auth";
 import { useUpdateSubscriptionMutation } from "../../slices/user";
+import toast from "react-hot-toast";
 
 interface Plan {
 	id: string;
@@ -41,8 +42,6 @@ export const PricingPlans = () => {
 
 	// const user = useGetUserQuery();
 	// console.log("requisição", user);
-
-
 
 	const [subscribe] = useUpdateSubscriptionMutation();
 
@@ -109,14 +108,14 @@ export const PricingPlans = () => {
 		e.preventDefault();
 		setIsLoading(true);
 
+		console.log(selectedPlan);
+
 		try {
-			// Simular processamento
 			await subscribe({
 				planId: selectedPlan?.id,
 				planName: selectedPlan?.name,
 			});
 
-			// Aqui você faria a chamada real para a API
 			console.log("Assinatura processada:", { plan: selectedPlan, formData });
 
 			// Fechar modal e resetar
@@ -131,10 +130,12 @@ export const PricingPlans = () => {
 				cardName: "",
 			});
 
-			alert("Assinatura realizada com sucesso!");
+			console.log(formData);
+
+			toast.success("Assinatura realizada com sucesso!");
 		} catch (error) {
 			console.error("Erro na assinatura:", error);
-			alert("Erro ao processar assinatura. Tente novamente.");
+			toast.error("Erro ao processar assinatura. Tente novamente.");
 		} finally {
 			setIsLoading(false);
 		}
@@ -373,7 +374,7 @@ export const PricingPlans = () => {
 									{/* Dados Pessoais */}
 									<div>
 										<label className="block text-sm font-medium text-gray-700 mb-1">
-											Nome Completo
+											Seu Nome Completo
 										</label>
 										<input
 											type="text"
@@ -388,7 +389,7 @@ export const PricingPlans = () => {
 
 									<div>
 										<label className="block text-sm font-medium text-gray-700 mb-1">
-											Email
+											Seu Email
 										</label>
 										<input
 											type="email"
@@ -403,7 +404,7 @@ export const PricingPlans = () => {
 
 									<div>
 										<label className="block text-sm font-medium text-gray-700 mb-1">
-											Telefone
+											Telefone / WhatsApp
 										</label>
 										<input
 											type="tel"

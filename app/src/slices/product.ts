@@ -1,5 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
-import type { Product, Result } from "../types/product.type";
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import type { Product } from "../types/product.type";
 import { apiSlice } from "./api";
 import type { RootState } from "../store/store";
 
@@ -7,10 +7,8 @@ const endPointUrl: string = "/products";
 
 export const productsApiSlice = apiSlice.injectEndpoints({
 	endpoints: ({ query, mutation }) => ({
-		getProducts: query<Result, { page?: number; limit?: number }>({
-			query: ({ page = 1, limit = 10 } = {}) =>
-				`products?page=${page}&limit=${limit}`,
-			providesTags: ["Products"],
+		getProducts: query<Product[], void>({
+			query: () => endPointUrl,
 		}),
 		createProduct: mutation<Product, FormData>({
 			query: (newProduct) => ({
@@ -38,39 +36,7 @@ export const productsApiSlice = apiSlice.injectEndpoints({
 	}),
 });
 
-const product: Product = {
-	ingredients: [
-		{
-			name: "Calabresa",
-			icon: "🍖",
-		},
-		{
-			name: "Queijo",
-			icon: "🧀",
-		},
-		{
-			name: "Molho",
-			icon: "🍅",
-		},
-	],
-	active: true,
-	category: "1234",
-	description: "pizza de calabresa com queijo",
-	establishment: "1233556",
-	imagePath: "../../assets/marguerita.png",
-	name: "pizza da casa",
-	price: 200,
-};
-
-const products = [
-	product,
-	{ ...product, id: "34567890", name: "pizza de 6 queijos" },
-	{ ...product, id: "ghart4465450", name: "pizza de 6 queijos" },
-	{ ...product, id: "345664647890", name: "pizza de Bacon" },
-	{ ...product, id: "345546466767890", name: "pizza de strogonoff" },
-];
-
-const initialState = products;
+const initialState: Product[] = [];
 
 const productsSlice = createSlice({
 	name: "products",
@@ -97,6 +63,14 @@ const productsSlice = createSlice({
 			);
 			state.slice(index, 1);
 		},
+	},
+	extraReducers: (builder) => {
+		builder.addMatcher(
+			productsApiSlice.endpoints.getProducts.matchFulfilled,
+			(state, { payload }: PayloadAction<Product[]>) => {
+				return payload;
+			}
+		);
 	},
 });
 
