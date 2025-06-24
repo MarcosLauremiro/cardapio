@@ -3,7 +3,7 @@ import {
 	type EstablishmentRegister,
 	type AuthResponse,
 	type Login,
-} from "../types/establishment";
+} from "../types/User";
 import { apiSlice } from "./api";
 import type { RootState } from "../store/store";
 
@@ -77,7 +77,6 @@ const authSlice = createSlice({
 
 export default authSlice.reducer;
 
-// Selectors
 export const setListUser = (state: RootState) => state.auth.user;
 export const selectToken = (state: RootState) => state.auth.token;
 export const selectIsAuthenticated = (state: RootState) =>

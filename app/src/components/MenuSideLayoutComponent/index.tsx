@@ -10,12 +10,17 @@ import {
 import { GrConfigure } from "react-icons/gr";
 import { MdOutlineRestaurantMenu } from "react-icons/md";
 import { useState } from "react";
+import { useAppSelector } from "../../store/hooks";
+import { setListUser } from "../../slices/auth";
 
 export const MenuSide: React.FC = () => {
 	const [isCollapsed, setIsCollapsed] = useState(false);
 
+	const user = useAppSelector(setListUser);
+	console.log(user);
+
 	const links = [
-		{ to: "/", label: "Home", icon: <FiHome /> },
+		{ to: "/home", label: "Home", icon: <FiHome /> },
 		{ to: "/history", label: "Histórico", icon: <FiClock /> },
 		{ to: "/cardapio", label: "Cardapio", icon: <FiClipboard /> },
 		{ to: "/menu", label: "?????", icon: <MdOutlineRestaurantMenu /> },

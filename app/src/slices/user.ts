@@ -1,4 +1,4 @@
-import { type Schedule, type Establishment } from "../types/establishment";
+import { type Schedule, type Establishment } from "../types/User";
 import { apiSlice } from "./api";
 
 const endPointUrl = "/establishment";

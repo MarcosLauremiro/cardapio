@@ -1,3 +1,7 @@
-export const Dashboard = () => {
-	return <></>;
+export const Home = () => {
+	return (
+		<>
+			<div></div>
+		</>
+	);
 };

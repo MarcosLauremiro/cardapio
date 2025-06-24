@@ -21,10 +21,10 @@ export type EstablishmentCategory =
 
 // Interface para horário de funcionamento
 export interface Schedule {
-	diaSemana: number; // 0 = domingo, 1 = segunda, … 6 = sábado
-	abertura: string; // formato "HH:mm"
-	fechamento: string; // formato "HH:mm"
-	fechado: boolean;
+	dayWeek: number; // 0 = domingo, 1 = segunda, … 6 = sábado
+	opening: string; // formato "HH:mm"
+	closed: string; // formato "HH:mm"
+	close: boolean;
 }
 
 // Interface para assinatura
@@ -102,12 +102,12 @@ export interface DeliverySettings {
 	estimatedTime?: string; // ex: "30-45 min"
 }
 
-export interface Establishment {
+export interface User {
 	_id?: string;
 	name: string;
 	slug?: string;
 	description?: string;
-	category?: EstablishmentCategory;
+	category?: string;
 	schedule?: Schedule[];
 	email: string;
 	emailVerified?: boolean;
@@ -148,7 +148,7 @@ export interface EstablishmentRegister {
 }
 
 export interface AuthResponse {
-	response: { token: string; user: Establishment };
+	response: { token: string; user: User };
 }
 
 export interface Login {
@@ -192,14 +192,14 @@ export interface PasswordUpdate {
 // Interface para resposta da API
 export interface EstablishmentResponse {
 	message: string;
-	establishment: Establishment;
+	establishment: User;
 	token?: string;
 }
 
 // Interface para resposta de lista
 export interface EstablishmentListResponse {
 	message: string;
-	establishments: Establishment[];
+	establishments: User[];
 	total: number;
 	page: number;
 	limit: number;

@@ -1,82 +1,86 @@
-// src/pages/Account.tsx
-import { useState } from "react";
-import {
-	MdAccountCircle,
-	MdLockPerson,
-	MdOutlineMenuOpen,
-} from "react-icons/md";
+import { useState, type JSX } from "react";
+import { AccountInfo } from "../../components/InfoAccountComponent"; // Assumindo que este é o AccountInfo_melhorado.tsx
+import { HeaderPage } from "../../components/HeaderPages";
+import { Plans } from "../../components/Plans"; // Manter como está
+import { useGetUserQuery } from "../../slices/user"; // Manter como está
+import { FiCreditCard, FiInfo, FiUsers, FiSettings } from "react-icons/fi";
+import { UsersAccount } from "../../components/UsersAccountComponent";
 
-import { AccountInfo } from "../../components/InfoAccountComponent";
-import { PlanAccount } from "../../components/PlanAccountComponent";
-import { PasswordAccount } from "../../components/PasswordAccountComponent";
-
-type MenuOption = "account" | "plan" | "password";
+interface Menu {
+	id: string;
+	name: string;
+	icon: JSX.Element;
+	page: JSX.Element;
+}
 
 export function Account() {
-	const [selected, setSelected] = useState<MenuOption>("account");
+	const { data: user, isLoading, isError } = useGetUserQuery();
+
+	const menu: Menu[] = [
+		{ id: "01", name: "Informações", icon: <FiInfo />, page: <AccountInfo /> },
+		{ id: "03", name: "Plano", icon: <FiCreditCard />, page: <Plans /> },
+		{ id: "04", name: "Usuários", icon: <FiUsers />, page: <UsersAccount /> },
+		{ id: "05", name: "Ajustes", icon: <FiSettings />, page: <AccountInfo /> },
+	];
+
+	const [current, setCurrent] = useState<Menu>(menu[0]); // Define a primeira aba como padrão
+
+	const handleClick = (item: Menu) => {
+		setCurrent(item);
+	};
+
+	if (isLoading) {
+		return (
+			<div className="flex items-center justify-center h-screen">
+				<div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600"></div>
+				<p className="ml-4 text-gray-600">Carregando página da conta...</p>
+			</div>
+		);
+	}
+
+	if (isError || !user) {
+		return (
+			<div className="flex items-center justify-center h-screen text-red-500">
+				<p>Erro ao carregar informações do usuário.</p>
+			</div>
+		);
+	}
 
 	return (
-		<div className="min-h-screen bg-gray-50">
-			<div className="flex">
-				{/* Sidebar (Menu) */}
-				<nav className="w-64 bg-white border-r border-gray-200 min-h-screen">
-					<div className="p-6">
-						<h2 className="text-2xl font-bold text-gray-800">
-							Meu Restaurante
-						</h2>
-					</div>
+		<div className="min-h-screen bg-gray-50 p-6">
+			<HeaderPage
+				title={`Restaurante ${user?.name}`}
+				description="Confira e altere informações do seu restaurante"
+				profile={`${user?.name.charAt(0)}`}
+			/>
 
-					<ul className="mt-6 space-y-1">
-						{/* Assinatura */}
-						<li>
+			<nav className="py-6">
+				<ul className="flex flex-wrap gap-3">
+					{menu.map((item) => (
+						<li key={item.id}>
 							<button
-								onClick={() => setSelected("plan")}
-								className={`w-full text-left flex items-center gap-2 px-6 py-2 transition ${
-									selected === "plan"
-										? "bg-gray-100 text-gray-900 font-medium"
-										: "text-gray-700 hover:bg-gray-100"
-								}`}
+								onClick={() => handleClick(item)}
+								className={`
+									flex items-center gap-2 px-4 py-2 rounded-full
+									transition-all duration-300 ease-in-out
+									${
+										current?.id === item.id
+											? "bg-emerald-600 text-white shadow-lg"
+											: "bg-white text-gray-700 border border-gray-200 hover:bg-gray-100 hover:shadow-md"
+									}
+								`}
 							>
-								<MdOutlineMenuOpen className="text-2xl" />
-								Assinatura
+								{item.icon}
+								<span className="font-medium text-sm">{item.name}</span>
 							</button>
 						</li>
+					))}
+				</ul>
+			</nav>
 
-						{/* Minha Conta */}
-						<li>
-							<button
-								onClick={() => setSelected("account")}
-								className={`w-full text-left flex items-center gap-2 px-6 py-2 transition ${
-									selected === "account"
-										? "bg-gray-100 text-gray-900 font-medium"
-										: "text-gray-700 hover:bg-gray-100"
-								}`}
-							>
-								<MdAccountCircle className="text-2xl" />
-								Minha Conta
-							</button>
-						</li>
-
-						{/* Mudar Senha */}
-						<li>
-							<button
-								onClick={() => setSelected("password")}
-								className={`w-full text-left flex items-center gap-2 px-6 py-2 transition ${
-									selected === "password"
-										? "bg-gray-100 text-gray-900 font-medium"
-										: "text-gray-700 hover:bg-gray-100"
-								}`}
-							>
-								<MdLockPerson className="text-2xl" />
-								Mudar Senha
-							</button>
-						</li>
-					</ul>
-				</nav>
-				{selected === "account" && <AccountInfo />}
-				{selected === "plan" && <PlanAccount />}
-				{selected === "password" && <PasswordAccount />}
-			</div>
+			<section className="bg-white rounded-xl p-6 shadow-md border border-gray-200">
+				{current?.page}
+			</section>
 		</div>
 	);
 }
