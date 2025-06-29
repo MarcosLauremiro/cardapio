@@ -11,40 +11,6 @@ export async function listProducts(req: Request, res: Response) {
 	}
 }
 
-export async function listProductsWithSkip(req: Request, res: Response) {
-	try {
-		const limit = parseInt(req.query.limit as string) || 10;
-		const skip = parseInt(req.query.skip as string) || 0;
-
-		if (limit > 100) {
-			return res
-				.status(400)
-				.json({ error: "Limit não pode ser maior que 100" });
-		}
-
-		const products = await Product.find()
-			.skip(skip)
-			.limit(limit)
-			.sort({ createdAt: -1 })
-			.populate("category");
-
-		const totalProducts = await Product.countDocuments();
-
-		res.json({
-			data: products,
-			pagination: {
-				limit,
-				skip,
-				total: totalProducts,
-				hasMore: skip + limit < totalProducts,
-			},
-		});
-	} catch (error) {
-		console.log(error);
-		res.status(500).json({ error: "Erro interno do servidor" });
-	}
-}
-
 export async function createProducts(req: Request, res: Response) {
 	try {
 		const userId = res.locals.userId;
