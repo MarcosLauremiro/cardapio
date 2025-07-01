@@ -2,20 +2,19 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { setCredentials, useRegisterMutation } from "../../slices/auth";
 import { useAppDispatch } from "../../store/hooks";
-import { isValidatePhone } from "../../utils/validatePhone";
+import type { RequestError } from "../../types/error";
+import cloche from "../../assets/cloche.svg";
 
-interface EstablishmentRegister {
+interface UserRegister {
 	name: string;
 	email: string;
-	phone: string;
 	password: string;
 }
 
 export const Register = () => {
-	const [formData, setFormData] = useState<EstablishmentRegister>({
+	const [formData, setFormData] = useState<UserRegister>({
 		name: "",
 		email: "",
-		phone: "",
 		password: "",
 	});
 	const [errors, setErrors] = useState<string>("");
@@ -24,8 +23,7 @@ export const Register = () => {
 	const navigate = useNavigate();
 	const [register, { isLoading }] = useRegisterMutation();
 
-	const isFormValid =
-		formData.name && formData.email && formData.phone && formData.password;
+	const isFormValid = formData.name && formData.email && formData.password;
 	const disable = !isFormValid || isLoading;
 
 	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,53 +39,38 @@ export const Register = () => {
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 
-		if (!isValidatePhone(formData.phone)) {
-			setErrors("Telefone inválido. Ex: (11) 91234-5678");
-			return;
-		}
-
 		try {
 			setErrors("");
 
 			const result = await register(formData).unwrap();
 
+			console.log("result register:", result);
+
 			dispatch(
 				setCredentials({
 					token: result.token,
-					establishment: result.establishment,
+					user: result.user,
 				})
 			);
 
-			navigate("/plan");
+			const tokenlocalStorage = localStorage.getItem("@userToken");
+			if (!tokenlocalStorage) {
+				navigate("/login");
+			}
+
+			navigate(`/register/${result.token}`);
 		} catch (error: unknown) {
 			console.error("Erro no registro:", error);
-			setErrors("Erro ao criar conta");
+			setErrors(`Erro ao criar conta, ${(error as RequestError).data.message}`);
 		}
 	};
 
 	return (
 		<div className="min-h-screen flex">
-			<div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-blue-600 to-blue-800 relative overflow-hidden">
-				<div className="absolute inset-0 bg-blue-600 opacity-90"></div>
-
-				{/* Elementos decorativos */}
-				<div className="absolute top-16 left-24 w-5 h-5 bg-yellow-400 rounded-full"></div>
-				<div className="absolute top-28 right-28 w-4 h-4 bg-pink-400 rounded-full"></div>
-				<div className="absolute bottom-36 left-20 w-6 h-6 bg-green-400 rounded-full"></div>
-				<div className="absolute top-44 right-16 w-5 h-5 bg-orange-400 rounded-full"></div>
-				<div className="absolute bottom-28 right-36 w-3 h-3 bg-blue-400 rounded-full"></div>
-				<div className="absolute top-72 left-16 w-4 h-4 bg-red-400 rounded-full"></div>
-
-				{/* Formas geométricas */}
-				<div className="absolute top-52 left-36 w-10 h-10 bg-cyan-400 transform rotate-45"></div>
-				<div className="absolute bottom-52 right-20 w-8 h-8 bg-emerald-400 transform rotate-12"></div>
-				<div className="absolute top-80 right-32 w-6 h-6 bg-rose-400 transform -rotate-45"></div>
-
-				{/* Conteúdo principal */}
+			<div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-[var(--color-primary)] to-[var(--color-primary-dark)] relative overflow-hidden image-cover">
+				<div className="absolute inset-0 bg-[var(--color-primary)] opacity-90"></div>
 				<div className="relative z-10 flex flex-col justify-center items-center text-white p-12 w-full">
-					{/* Cards de exemplo - tema restaurante */}
 					<div className="mb-8 relative">
-						{/* Card principal - Dashboard */}
 						<div className="bg-white rounded-2xl p-6 shadow-2xl transform -rotate-2 w-80">
 							<div className="flex items-center mb-4">
 								<div className="w-12 h-12 bg-purple-500 rounded-lg flex items-center justify-center mr-4">
@@ -115,7 +98,6 @@ export const Register = () => {
 							</div>
 						</div>
 
-						{/* Card secundário - Menu */}
 						<div className="absolute -bottom-6 -right-6 bg-white rounded-xl p-4 shadow-xl transform rotate-6 w-64">
 							<div className="flex items-center mb-3">
 								<div className="w-8 h-8 bg-orange-500 rounded-lg mr-2"></div>
@@ -141,7 +123,7 @@ export const Register = () => {
 
 						<div className="absolute -top-4 -left-8 bg-white rounded-lg p-3 shadow-lg transform -rotate-12 w-48">
 							<div className="text-center">
-								<div className="text-2xl font-bold text-purple-600">94%</div>
+								<div className="text-2xl font-bold text-purple-600">96%</div>
 								<div className="text-xs text-gray-500">Satisfação</div>
 							</div>
 						</div>
@@ -156,9 +138,9 @@ export const Register = () => {
 							completa
 						</p>
 						<div className="flex justify-center space-x-2 mt-8">
-							<div className="w-2 h-2 bg-purple-300 rounded-full"></div>
+							<div className="w-2 h-2 bg-[var(--color-secondary)] rounded-full"></div>
 							<div className="w-2 h-2 bg-white rounded-full"></div>
-							<div className="w-2 h-2 bg-purple-300 rounded-full"></div>
+							<div className="w-2 h-2 bg-[var(--color-secondary)] rounded-full"></div>
 						</div>
 					</div>
 				</div>
@@ -167,13 +149,7 @@ export const Register = () => {
 				<div className="w-full max-w-md">
 					<div className="text-center mb-8">
 						<div className="inline-flex items-center justify-center w-16 h-16 bg-purple-100 rounded-2xl mb-4">
-							<svg
-								className="w-8 h-8 text-purple-600"
-								fill="currentColor"
-								viewBox="0 0 20 20"
-							>
-								<path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-							</svg>
+							<img src={cloche} alt="cloche logo" />
 						</div>
 					</div>
 					<div className="text-center mb-8">
@@ -199,18 +175,6 @@ export const Register = () => {
 							/>
 						</div>
 
-						<div>
-							<input
-								id="phone"
-								name="phone"
-								type="tel"
-								value={formData.phone}
-								onChange={handleInputChange}
-								className="w-full px-4 py-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 placeholder-gray-400"
-								placeholder="Telefone"
-								required
-							/>
-						</div>
 						<div>
 							<input
 								id="email"
@@ -246,7 +210,7 @@ export const Register = () => {
 							className={`w-full py-4 rounded-xl font-semibold transition-all duration-200 ${
 								disable
 									? "bg-gray-300 text-gray-500 cursor-not-allowed"
-									: "bg-blue-600 text-white hover:bg-blue-700 transform hover:scale-[1.02] active:scale-[0.98]"
+									: "bg-[var(--color-primary)] text-white hover:bg-[var(--color-primary-dark)] transform hover:scale-[1.02] active:scale-[0.98]"
 							}`}
 						>
 							{isLoading ? "Criando conta..." : "Fazer Registro"}
@@ -255,7 +219,7 @@ export const Register = () => {
 							<span className="text-gray-600">Você já tem uma conta? </span>
 							<a
 								href="/login"
-								className="text-blue-600 hover:text-blue-800 font-semibold transition-colors"
+								className="text-[var(--color-primary)] hover:text-[var(--color-primary-dark)] font-semibold transition-colors"
 							>
 								Fazer login
 							</a>

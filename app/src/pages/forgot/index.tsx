@@ -77,28 +77,10 @@ export const ForgotPassword = () => {
 
 	return (
 		<div className="min-h-screen flex">
-			{/* Lado Esquerdo - Ilustração */}
-			<div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-emerald-600 to-teal-800 relative overflow-hidden">
-				<div className="absolute inset-0 bg-emerald-600 opacity-90"></div>
-
-				{/* Elementos decorativos */}
-				<div className="absolute top-20 left-28 w-4 h-4 bg-yellow-400 rounded-full"></div>
-				<div className="absolute top-36 right-24 w-5 h-5 bg-orange-400 rounded-full"></div>
-				<div className="absolute bottom-40 left-16 w-6 h-6 bg-pink-400 rounded-full"></div>
-				<div className="absolute top-48 right-32 w-4 h-4 bg-blue-400 rounded-full"></div>
-				<div className="absolute bottom-32 right-20 w-5 h-5 bg-purple-400 rounded-full"></div>
-				<div className="absolute top-64 left-20 w-3 h-3 bg-red-400 rounded-full"></div>
-
-				{/* Formas geométricas */}
-				<div className="absolute top-56 left-40 w-8 h-8 bg-cyan-400 transform rotate-45"></div>
-				<div className="absolute bottom-56 right-28 w-10 h-10 bg-lime-400 transform rotate-12"></div>
-				<div className="absolute top-32 right-40 w-6 h-6 bg-rose-400 transform -rotate-45"></div>
-
-				{/* Conteúdo principal */}
+			<div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-[var(--color-primary)] to-[var(--color-primary)] relative overflow-hidden">
+				<div className="absolute inset-0 bg-[var(--color-primary)] opacity-90"></div>
 				<div className="relative z-10 flex flex-col justify-center items-center text-white p-12 w-full">
-					{/* Ilustração de segurança */}
 					<div className="mb-8 relative">
-						{/* Card principal - Segurança */}
 						<div className="bg-white rounded-2xl p-6 shadow-2xl transform rotate-1 w-80">
 							<div className="flex items-center mb-4">
 								<div className="w-12 h-12 bg-emerald-500 rounded-lg flex items-center justify-center mr-4">
@@ -190,8 +172,8 @@ export const ForgotPassword = () => {
 							verificação por email
 						</p>
 						<div className="flex justify-center space-x-2 mt-8">
-							<div className="w-2 h-2 bg-emerald-300 rounded-full"></div>
-							<div className="w-2 h-2 bg-emerald-300 rounded-full"></div>
+							<div className="w-2 h-2 bg-[var(--color-secondary)] rounded-full"></div>
+							<div className="w-2 h-2 bg-[var(--color-secondary)] rounded-full"></div>
 							<div className="w-2 h-2 bg-white rounded-full"></div>
 						</div>
 					</div>
@@ -252,7 +234,7 @@ export const ForgotPassword = () => {
 									className={`w-full py-4 rounded-xl font-semibold transition-all duration-200 ${
 										disable
 											? "bg-gray-300 text-gray-500 cursor-not-allowed"
-											: "bg-emerald-600 text-white hover:bg-emerald-700 transform hover:scale-[1.02] active:scale-[0.98]"
+											: "bg-[var(--color-primary)] text-white hover:bg-[var(--color-primary-dark)] transform hover:scale-[1.02] active:scale-[0.98]"
 									}`}
 								>
 									{isLoading ? "Enviando..." : "Enviar link"}
@@ -261,7 +243,7 @@ export const ForgotPassword = () => {
 									<button
 										type="button"
 										onClick={handleBackToLogin}
-										className="text-emerald-600 hover:text-emerald-800 font-semibold transition-colors flex items-center justify-center space-x-2 mx-auto"
+										className="text-[var(--color-primary)] hover:text-[var(--color-primary-dark)] font-semibold transition-colors flex items-center justify-center space-x-2 mx-auto"
 									>
 										<svg
 											className="w-4 h-4"
@@ -340,7 +322,7 @@ export const ForgotPassword = () => {
 									<button
 										type="button"
 										onClick={handleBackToLogin}
-										className="text-emerald-600 hover:text-emerald-800 font-semibold transition-colors flex items-center justify-center space-x-2 mx-auto"
+										className="text-emerald-600 hover:text-[var(--color-primary-dark)] font-semibold transition-colors flex items-center justify-center space-x-2 mx-auto"
 									>
 										<svg
 											className="w-4 h-4"
@@ -353,7 +335,7 @@ export const ForgotPassword = () => {
 												clipRule="evenodd"
 											/>
 										</svg>
-										<span>Back to Login</span>
+										<span>Voltar ao Login</span>
 									</button>
 								</div>
 							</div>

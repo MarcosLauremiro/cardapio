@@ -1,32 +1,43 @@
 import { useEffect, useState } from "react";
 import type { Schedule, User } from "../../types/User";
 import { FiEdit, FiSave, FiX } from "react-icons/fi";
+import { useGetUserQuery } from "../../slices/user";
+
+interface FormData {
+	name: string;
+	email: string;
+	phone: string;
+	website: string;
+	description: string;
+	street: string;
+	number: string;
+	complement: string;
+	neighborhood: string;
+	city: string;
+	state: string;
+	zipCode: string;
+}
 
 export function AccountInfo() {
-	const [establishment, setEstablishment] = useState<User | null>(null);
-	const [formData, setFormData] = useState({
+	const [establishment, setEstablishment] = useState<User>();
+	const [formData, setFormData] = useState<FormData>({
 		name: "",
 		email: "",
 		phone: "",
-		whatsapp: "",
 		website: "",
-		instagram: "",
-		facebook: "",
+		description: "",
 		street: "",
 		number: "",
+		complement: "",
 		neighborhood: "",
 		city: "",
 		state: "",
 		zipCode: "",
-		hasDelivery: false,
-		deliveryFee: 0,
-		minimumOrder: 0,
-		deliveryRadius: 0,
-		estimatedTime: "",
 	});
-	const [loading, setLoading] = useState(true);
 	const [editing, setEditing] = useState(false);
 	const [schedule, setSchedule] = useState<Schedule[]>([]);
+
+	const { data: user, isLoading } = useGetUserQuery();
 
 	const weekDaysMap = [
 		"Domingo",
@@ -39,137 +50,35 @@ export function AccountInfo() {
 	];
 
 	useEffect(() => {
-		const mock: User = {
-			_id: "64b7a4f9c3d6e2a5f2a1f3a7",
-			name: "Delícias da Ju",
-			slug: "delicias-da-ju",
-			description:
-				"Padaria artesanal com pães e bolos feitos com ingredientes naturais.",
-			category: "bakery",
-			schedule: [
-				{ dayWeek: 0, opening: "08:00", closed: "14:00", close: true }, // Domingo
-				{ dayWeek: 1, opening: "08:00", closed: "18:00", close: false }, // Segunda
-				{ dayWeek: 2, opening: "08:00", closed: "18:00", close: false }, // Terça
-				{ dayWeek: 3, opening: "08:00", closed: "18:00", close: false }, // Quarta
-				{ dayWeek: 4, opening: "08:00", closed: "18:00", close: false }, // Quinta
-				{ dayWeek: 5, opening: "08:00", closed: "18:00", close: false }, // Sexta
-				{ dayWeek: 6, opening: "08:00", closed: "14:00", close: false }, // Sábado
-			],
-			email: "contato@deliciasdaju.com",
-			emailVerified: true,
-			phone: "+55 (11) 99999-8888",
-			whatsapp: "+55 (11) 99999-8888",
-			website: "https://deliciasdaju.com",
-			address: {
-				street: "Rua das Flores",
-				number: "123",
-				neighborhood: "Centro",
-				city: "São Paulo",
-				state: "SP",
-				zipCode: "01001-000",
-				coordinates: {
-					latitude: -23.55052,
-					longitude: -46.633308,
-				},
-			},
-			cnpj: "12.345.678/0001-99",
-			businessName: "Delícias da Ju LTDA",
-			subscription: {
-				planId: "basic",
-				planName: "Plano Básico",
-				status: "active",
-				startDate: new Date("2024-01-01"),
-				renewalDate: new Date("2025-01-01"),
-				price: 49.9,
-				autoRenewal: true,
-			},
-			billingInfo: {
-				cardLastFour: "1234",
-				cardBrand: "Visa",
-				holderName: "Juliana Silva",
-				billingAddress: {
-					street: "Rua das Flores",
-					number: "123",
-					neighborhood: "Centro",
-					city: "São Paulo",
-					state: "SP",
-					zipCode: "01001-000",
-				},
-			},
-			status: "active",
-			isApproved: true,
-			features: {
-				maxProducts: 100,
-				maxPhotos: 20,
-				canAcceptOnlineOrders: true,
-				canUseAnalytics: true,
-				canCustomizeTheme: true,
-			},
-			logo: "https://example.com/images/logo.png",
-			coverImage: "https://example.com/images/cover.jpg",
-			photos: [
-				{ url: "https://example.com/images/loja1.jpg" },
-				{ url: "https://example.com/images/loja2.jpg" },
-			],
-			socialMedia: {
-				instagram: "https://instagram.com/deliciasdaju",
-				facebook: "https://facebook.com/deliciasdaju",
-			},
-			deliverySettings: {
-				hasDelivery: true,
-				deliveryFee: 5.0,
-				minimumOrder: 20,
-				deliveryRadius: 10,
-				estimatedTime: "30-45 min",
-			},
-			createdAt: new Date("2024-01-01T10:00:00Z"),
-			updatedAt: new Date("2025-01-01T10:00:00Z"),
-			lastLogin: new Date("2025-06-23T08:00:00Z"),
-			link: "https://deliciasdaju.com",
-			neighborhood: "Centro",
-			road: "Rua das Flores",
-			city: "São Paulo",
-			state: "SP",
-			number: "123",
-		};
-
-		setTimeout(() => {
-			setEstablishment(mock);
-			setFormData({
-				name: mock.name,
-				email: mock.email,
-				phone: mock.phone,
-				whatsapp: mock.whatsapp || "",
-				website: mock.website || "",
-				instagram: mock.socialMedia?.instagram || "",
-				facebook: mock.socialMedia?.facebook || "",
-				street: mock.address?.street || "",
-				number: mock.address?.number || "",
-				neighborhood: mock.address?.neighborhood || "",
-				city: mock.address?.city || "",
-				state: mock.address?.state || "",
-				zipCode: mock.address?.zipCode || "",
-				hasDelivery: mock.deliverySettings?.hasDelivery || false,
-				deliveryFee: mock.deliverySettings?.deliveryFee || 0,
-				minimumOrder: mock.deliverySettings?.minimumOrder || 0,
-				deliveryRadius: mock.deliverySettings?.deliveryRadius || 0,
-				estimatedTime: mock.deliverySettings?.estimatedTime || "",
-			});
-			setSchedule(mock.schedule ?? []);
-			setLoading(false);
-		}, 500);
-	}, []);
+		if (user) {
+			setTimeout(() => {
+				setEstablishment(user);
+				setFormData({
+					name: user.name || "",
+					email: user.email || "",
+					phone: user.phone || "",
+					website: user.website || "",
+					description: user.description || "",
+					street: user.address?.street || "",
+					number: user.address?.number || "",
+					complement: user.address?.complement || "",
+					neighborhood: user.address?.neighborhood || "",
+					city: user.address?.city || "",
+					state: user.address?.state || "",
+					zipCode: user.address?.zipCode || "",
+				});
+				setSchedule(user.schedule ?? []);
+			}, 500);
+		}
+	}, [user]);
 
 	const handleInputChange = (
 		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
 	) => {
-		const { name, value, type } = e.target;
+		const { name, value } = e.target;
 		setFormData((prev) => ({
 			...prev,
-			[name]:
-				type === "checkbox" && "checked" in e.target
-					? (e.target as HTMLInputElement).checked
-					: value,
+			[name]: value,
 		}));
 	};
 
@@ -187,38 +96,50 @@ export function AccountInfo() {
 	};
 
 	const handleSalvar = () => {
-		console.log("Salvando dados:", { ...formData, schedule });
+		const updatedUser: Partial<User> = {
+			name: formData.name,
+			email: formData.email,
+			phone: formData.phone,
+			website: formData.website,
+			description: formData.description,
+			address: {
+				street: formData.street,
+				number: formData.number,
+				complement: formData.complement,
+				neighborhood: formData.neighborhood,
+				city: formData.city,
+				state: formData.state,
+				zipCode: formData.zipCode,
+			},
+			schedule: schedule,
+		};
+
+		console.log("Salvando dados:", updatedUser);
 		setEditing(false);
 	};
 
 	const handleCancelar = () => {
 		if (establishment) {
 			setFormData({
-				name: establishment.name,
-				email: establishment.email,
-				phone: establishment.phone,
-				whatsapp: establishment.whatsapp || "",
+				name: establishment.name || "",
+				email: establishment.email || "",
+				phone: establishment.phone || "",
 				website: establishment.website || "",
-				instagram: establishment.socialMedia?.instagram || "",
-				facebook: establishment.socialMedia?.facebook || "",
+				description: establishment.description || "",
 				street: establishment.address?.street || "",
 				number: establishment.address?.number || "",
+				complement: establishment.address?.complement || "",
 				neighborhood: establishment.address?.neighborhood || "",
 				city: establishment.address?.city || "",
 				state: establishment.address?.state || "",
 				zipCode: establishment.address?.zipCode || "",
-				hasDelivery: establishment.deliverySettings?.hasDelivery || false,
-				deliveryFee: establishment.deliverySettings?.deliveryFee || 0,
-				minimumOrder: establishment.deliverySettings?.minimumOrder || 0,
-				deliveryRadius: establishment.deliverySettings?.deliveryRadius || 0,
-				estimatedTime: establishment.deliverySettings?.estimatedTime || "",
 			});
 			setSchedule(establishment.schedule ?? []);
 		}
 		setEditing(false);
 	};
 
-	if (loading || !establishment) {
+	if (isLoading || !establishment) {
 		return (
 			<div className="flex items-center justify-center h-64">
 				<div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600"></div>
@@ -231,8 +152,8 @@ export function AccountInfo() {
 
 	const renderField = (
 		label: string,
-		value: string | number | boolean,
-		name: string,
+		value: string | number,
+		name: keyof FormData,
 		type: string = "text"
 	) => (
 		<div>
@@ -240,37 +161,28 @@ export function AccountInfo() {
 				{label}:
 			</label>
 			{editing ? (
-				<input
-					type={type}
-					name={name}
-					className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-colors"
-					value={value as string}
-					onChange={handleInputChange}
-				/>
+				type === "textarea" ? (
+					<textarea
+						name={name}
+						className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-colors resize-vertical min-h-[100px]"
+						value={value as string}
+						onChange={handleInputChange}
+						rows={3}
+					/>
+				) : (
+					<input
+						type={type}
+						name={name}
+						className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-colors"
+						value={value as string}
+						onChange={handleInputChange}
+					/>
+				)
 			) : (
-				<p className="text-gray-800 font-medium">{value || "Não informado"}</p>
+				<p className="text-gray-800 font-medium">
+					{value || "Não informado *"}
+				</p>
 			)}
-		</div>
-	);
-
-	const renderCheckboxField = (label: string, value: boolean, name: string) => (
-		<div className="flex items-center">
-			{editing ? (
-				<input
-					type="checkbox"
-					name={name}
-					checked={value}
-					onChange={handleInputChange}
-					className="h-4 w-4 text-emerald-600 border-gray-300 rounded focus:ring-emerald-500"
-				/>
-			) : (
-				<span
-					className={`w-4 h-4 rounded-full ${
-						value ? "bg-emerald-500" : "bg-gray-300"
-					}`}
-				/>
-			)}
-			<label className="ml-2 text-sm font-medium text-gray-700">{label}</label>
 		</div>
 	);
 
@@ -315,11 +227,10 @@ export function AccountInfo() {
 					{renderField("Nome do Restaurante", formData.name, "name")}
 					{renderField(
 						"Descrição",
-						establishment.description || "",
+						formData.description,
 						"description",
 						"textarea"
 					)}
-					{renderField("Categoria", establishment.category || "", "category")}
 				</div>
 			</section>
 
@@ -329,10 +240,7 @@ export function AccountInfo() {
 				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 					{renderField("E-mail", formData.email, "email", "email")}
 					{renderField("Telefone", formData.phone, "phone")}
-					{renderField("WhatsApp", formData.whatsapp, "whatsapp")}
 					{renderField("Website", formData.website, "website")}
-					{renderField("Instagram", formData.instagram, "instagram")}
-					{renderField("Facebook", formData.facebook, "facebook")}
 				</div>
 			</section>
 
@@ -342,6 +250,7 @@ export function AccountInfo() {
 				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 					{renderField("Rua", formData.street, "street")}
 					{renderField("Número", formData.number, "number")}
+					{renderField("Complemento", formData.complement, "complement")}
 					{renderField("Bairro", formData.neighborhood, "neighborhood")}
 					{renderField("Cidade", formData.city, "city")}
 					{renderField("Estado", formData.state, "state")}
@@ -420,47 +329,6 @@ export function AccountInfo() {
 							</div>
 						</div>
 					))}
-				</div>
-			</section>
-
-			{/* Seção: Configurações de Entrega */}
-			<section className="bg-white rounded-xl shadow-md border border-gray-200 p-6">
-				<h2 className="text-2xl font-bold text-gray-800 mb-6">
-					Configurações de Entrega
-				</h2>
-				<div className="space-y-4">
-					{renderCheckboxField(
-						"Possui Entrega",
-						formData.hasDelivery,
-						"hasDelivery"
-					)}
-					{formData.hasDelivery && (
-						<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-							{renderField(
-								"Taxa de Entrega",
-								formData.deliveryFee,
-								"deliveryFee",
-								"number"
-							)}
-							{renderField(
-								"Pedido Mínimo",
-								formData.minimumOrder,
-								"minimumOrder",
-								"number"
-							)}
-							{renderField(
-								"Raio de Entrega (km)",
-								formData.deliveryRadius,
-								"deliveryRadius",
-								"number"
-							)}
-							{renderField(
-								"Tempo Estimado (ex: 30-45 min)",
-								formData.estimatedTime,
-								"estimatedTime"
-							)}
-						</div>
-					)}
 				</div>
 			</section>
 		</main>

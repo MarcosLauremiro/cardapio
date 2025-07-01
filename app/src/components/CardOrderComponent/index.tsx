@@ -9,14 +9,24 @@ interface CardOrderProps {
 	onSelectOrder: (order: Order) => void;
 	emptyMessage?: string;
 	columnId?: string;
-	status: "WAITING" | "IN_PRODUCTION" | "DONE";
+	status:
+		| "WAITING"
+		| "IN_PRODUCTION"
+		| "DONE"
+		| "OUT_FOR_DELIVERY"
+		| "DELIVERED";
 }
 
 interface DraggableOrderCardProps {
 	order: Order;
 	onSelectOrder: (order: Order) => void;
 	columnId?: string;
-	status: "WAITING" | "IN_PRODUCTION" | "DONE";
+	status:
+		| "WAITING"
+		| "IN_PRODUCTION"
+		| "DONE"
+		| "OUT_FOR_DELIVERY"
+		| "DELIVERED";
 }
 
 const getTimeElapsed = (createdAt: Date) => {

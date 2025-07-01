@@ -6,14 +6,26 @@ import { FiClock, FiChevronLeft, FiCheckCircle } from "react-icons/fi";
 interface ColumnProps {
 	title: string;
 	orders: Order[];
-	status: "WAITING" | "IN_PRODUCTION" | "DONE";
+	status:
+		| "WAITING"
+		| "IN_PRODUCTION"
+		| "DONE"
+		| "OUT_FOR_DELIVERY"
+		| "DELIVERED";
 	onSelectOrder: (order: Order) => void;
 	bgColorClass?: string;
 	hoverBgClass?: string;
 	bgCollun?: string;
 }
 
-const getColumnConfig = (status: "WAITING" | "IN_PRODUCTION" | "DONE") => {
+const getColumnConfig = (
+	status:
+		| "WAITING"
+		| "IN_PRODUCTION"
+		| "DONE"
+		| "OUT_FOR_DELIVERY"
+		| "DELIVERED"
+) => {
 	switch (status) {
 		case "WAITING":
 			return {
@@ -91,8 +103,6 @@ export const Column = ({
 							</p>
 						</div>
 					</div>
-
-					{/* Badge com contador */}
 					<div
 						className={`
 						${config.badgeColor} text-white
@@ -106,8 +116,7 @@ export const Column = ({
 				</div>
 			</div>
 
-			{/* Conteúdo da Coluna */}
-			<div className="p-4">
+			<div className="p-2">
 				<CardOrder
 					title={title}
 					orders={orders}

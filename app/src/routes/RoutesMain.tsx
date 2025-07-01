@@ -8,16 +8,15 @@ import { History } from "../pages/history";
 import { Menu } from "../pages/menu";
 import { ProtectRoutes } from "./ProtectRoutes";
 import { PricingPlans } from "../pages/plan";
-import { ForgotPassword } from "../pages/forgot";
 import { setListUser } from "../slices/auth";
 import { useGetUserQuery } from "../slices/user";
 import { useAppSelector } from "../store/hooks";
+import CompleteRegister from "../components/CompleteRegisterComponent";
 
 interface MiddlewareProps {
 	children: React.ReactNode;
 }
 
-// Componente de Loading
 const LoadingSpinner = () => (
 	<div
 		style={{
@@ -45,10 +44,7 @@ const Middleware = ({ children }: MiddlewareProps) => {
 		return <Navigate to="/login" replace />;
 	}
 
-	if (
-		data?.status === "pending" ||
-		user?.response?.user?.status === "pending"
-	) {
+	if (data?.status === "pending" || user?.user?.status === "pending") {
 		return <Navigate to="/plan" replace />;
 	}
 
@@ -57,12 +53,12 @@ const Middleware = ({ children }: MiddlewareProps) => {
 
 export const RoutesMain = () => {
 	const routesWithLayout = [
-		{ path: "/home", component: Orders, protected: true, useMiddleware: true },
+		{ path: "/home", component: Orders, protected: true, useMiddleware: false },
 		{
 			path: "/account",
 			component: Account,
 			protected: true,
-			useMiddleware: true,
+			useMiddleware: false,
 		},
 		{
 			path: "/history",
@@ -70,12 +66,12 @@ export const RoutesMain = () => {
 			protected: true,
 			useMiddleware: false,
 		},
-		{ path: "/menu", component: Menu, protected: true, useMiddleware: true },
+		{ path: "/menu", component: Menu, protected: true, useMiddleware: false },
 		{
 			path: "/cardapio",
 			component: Menu,
 			protected: true,
-			useMiddleware: true,
+			useMiddleware: false,
 		},
 	];
 
@@ -99,8 +95,8 @@ export const RoutesMain = () => {
 			useMiddleware: false,
 		}, // Plan não deve usar middleware
 		{
-			path: "/forgot-password",
-			component: ForgotPassword,
+			path: "/register/:id",
+			component: CompleteRegister,
 			protected: false,
 			useMiddleware: false,
 		},

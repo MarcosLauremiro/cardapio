@@ -18,7 +18,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
 	endpoints: (build) => ({
 		login: build.mutation<AuthResponse, Login>({
 			query: (credentials) => ({
-				url: "/auth/login",
+				url: "/login",
 				method: "POST",
 				body: credentials,
 			}),
@@ -26,7 +26,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
 		}),
 		register: build.mutation<AuthResponse, EstablishmentRegister>({
 			query: (data) => ({
-				url: "/auth/register",
+				url: "/register",
 				method: "POST",
 				body: data,
 			}),
@@ -42,7 +42,6 @@ export const authApiSlice = apiSlice.injectEndpoints({
 	}),
 });
 
-// Estado inicial limpo, sem localStorage
 const initialState: AuthState = {
 	token: null,
 	user: null,
@@ -55,7 +54,7 @@ const authSlice = createSlice({
 	initialState,
 	reducers: {
 		setCredentials: (state, action: PayloadAction<AuthResponse>) => {
-			const token = action.payload.response.token;
+			const token = action.payload.token;
 			state.token = token;
 			state.user = action.payload;
 			state.isAuthenticated = true;

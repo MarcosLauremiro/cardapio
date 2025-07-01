@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useUpdateSubscriptionMutation } from "../../slices/user";
+import {} from "../../slices/user";
 import type { Plan } from "../Plans";
 import toast from "react-hot-toast";
 
@@ -23,7 +23,6 @@ export function ModalGetPlan({
 	setIsModalOpen,
 }: ModalGetPlanProps) {
 	const [isLoading, setIsLoading] = useState(false);
-	const [subscribe] = useUpdateSubscriptionMutation();
 	const [formData, setFormData] = useState<SubscriptionFormData>({
 		name: "",
 		email: "",
@@ -47,11 +46,6 @@ export function ModalGetPlan({
 		setIsLoading(true);
 
 		try {
-			await subscribe({
-				planId: selectedPlan?.id,
-				planName: selectedPlan?.name,
-			});
-
 			console.log("Assinatura processada:", { plan: selectedPlan, formData });
 
 			setIsModalOpen();

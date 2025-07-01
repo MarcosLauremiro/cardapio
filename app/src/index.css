@@ -1,9 +1,9 @@
 @import "tailwindcss";
 :root {
 	/* --- Cores Principais --- */
-	--color-primary: #f2cb05; /* Amarelo Principal */
-	--color-primary-dark: #d9a404; /* Amarelo Escuro (Hover/Active) */
-	--color-secondary: #f29f05; /* Laranja Secundário */
+	--color-primary: #437057; /* Amarelo Principal */
+	--color-primary-dark: #2F5249; /* Amarelo Escuro (Hover/Active) */
+	--color-secondary: #97b067; /* Laranja Secundário */
 	--color-detail: #8c6a03; /* Detalhe (Bordas, etc.) */
 
 	/* --- Cores de Texto --- */
@@ -139,4 +139,11 @@ body {
 	&:hover {
 		background-color: var(--color-primary-dark);
 	}
+}
+
+.image-cover {
+	background-image: url("../src/assets/cover.png");
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
 }

@@ -51,17 +51,8 @@ export const Login = () => {
 
 	return (
 		<div className="min-h-screen flex">
-			<div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-blue-600 to-blue-800 relative overflow-hidden">
-				<div className="absolute inset-0 bg-blue-600 opacity-90"></div>
-
-				<div className="absolute top-20 left-20 w-4 h-4 bg-orange-400 rounded-full"></div>
-				<div className="absolute top-32 right-32 w-3 h-3 bg-green-400 rounded-full"></div>
-				<div className="absolute bottom-40 left-16 w-5 h-5 bg-yellow-400 rounded-full"></div>
-				<div className="absolute top-40 right-20 w-6 h-6 bg-red-400 rounded-full"></div>
-				<div className="absolute bottom-32 right-40 w-4 h-4 bg-green-500 rounded-full"></div>
-
-				<div className="absolute top-60 left-32 w-8 h-8 bg-purple-400 transform rotate-45"></div>
-				<div className="absolute bottom-60 right-24 w-6 h-6 bg-pink-400 transform rotate-12"></div>
+			<div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-[var(--color-primary)] to-[var(--color-primary-dark)] relative overflow-hidden image-cover">
+				<div className="absolute inset-0 bg-[var(--color-primary)] opacity-90"></div>
 
 				<div className="relative z-10 flex flex-col justify-center items-center text-white p-12 w-full">
 					<div className="mb-8 relative">
@@ -106,8 +97,8 @@ export const Login = () => {
 
 						<div className="flex justify-center space-x-2 mt-8">
 							<div className="w-2 h-2 bg-white rounded-full"></div>
-							<div className="w-2 h-2 bg-blue-300 rounded-full"></div>
-							<div className="w-2 h-2 bg-blue-300 rounded-full"></div>
+							<div className="w-2 h-2 bg-[var(--color-secondary)] rounded-full"></div>
+							<div className="w-2 h-2 bg-[var(--color-secondary)] rounded-full"></div>
 						</div>
 					</div>
 				</div>
@@ -137,7 +128,7 @@ export const Login = () => {
 								type="email"
 								value={formData.email}
 								onChange={handleInputChange}
-								className="w-full px-4 py-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 placeholder-gray-400"
+								className="w-full px-4 py-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent transition-all duration-200 placeholder-gray-400"
 								placeholder="Email"
 								required
 							/>
@@ -150,20 +141,20 @@ export const Login = () => {
 								type="password"
 								value={formData.password}
 								onChange={handleInputChange}
-								className="w-full px-4 py-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 placeholder-gray-400"
+								className="w-full px-4 py-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent transition-all duration-200 placeholder-gray-400"
 								placeholder="Senha"
 								required
 							/>
 						</div>
 
-						<div className="text-right">
+						{/* <div className="text-right">
 							<a
 								href="/forgot-password"
-								className="text-sm text-blue-600 hover:text-blue-800 transition-colors"
+								className="text-sm text-[var(--color-primary-dark)] hover:text-[var(--color-primary)] transition-colors"
 							>
 								Recuperar senha
 							</a>
-						</div>
+						</div> */}
 
 						{errors && (
 							<div className="text-red-500 text-sm text-center bg-red-50 p-3 rounded-xl border border-red-200">
@@ -177,7 +168,7 @@ export const Login = () => {
 							className={`w-full py-4 rounded-xl font-semibold transition-all duration-200 ${
 								disable
 									? "bg-gray-300 text-gray-500 cursor-not-allowed"
-									: "bg-blue-600 text-white hover:bg-blue-700 transform hover:scale-[1.02] active:scale-[0.98]"
+									: "bg-[var(--color-primary)] text-white hover:bg-[var(--color-primary-dark)] transform hover:scale-[1.02] active:scale-[0.98]"
 							}`}
 						>
 							{isLoading ? "Entrando..." : "Fazer Login"}
@@ -190,7 +181,7 @@ export const Login = () => {
 							<span className="text-gray-600">Ainda não tem conta? </span>
 							<a
 								href="/register"
-								className="text-blue-600 hover:text-blue-800 font-semibold transition-colors"
+								className="text-[var(--color-primary-dark)] hover:text-[var(--color-primary)] font-semibold transition-colors"
 							>
 								Registrar-se
 							</a>
